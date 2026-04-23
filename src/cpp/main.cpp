@@ -13,8 +13,10 @@ int main(int argc, char** argv)
     {
         if (std::string(argv[1]) == "init")
         {
+            std::cout << "Performing initialization prrrocedure...\n";
             RunSQLFile("Initialization/cafe_db.sql", "cafe_db");
             RunSQLFile("Initialization/cafe_add_init_items.sql", "cafe_db");
+            std::cout << "Database initialization complete.\n";
         }
     }
 

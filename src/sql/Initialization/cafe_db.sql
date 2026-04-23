@@ -5,7 +5,7 @@ USE cafe_db;
 CREATE TABLE IF NOT EXISTS Ingredients (
   ingredient_id INT AUTO_INCREMENT PRIMARY KEY,
   label VARCHAR(255) NOT NULL UNIQUE,
-  amount INT
+  amount DECIMAL(10,2)
 );
 
 CREATE TABLE IF NOT EXISTS MenuItems (
@@ -16,13 +16,14 @@ CREATE TABLE IF NOT EXISTS MenuItems (
 );
 
 CREATE TABLE IF NOT EXISTS MenuItemIngredients (
-  item_id INT NOT NULL,
+  menu_item_id INT NOT NULL,
   ingredient_id INT NOT NULL,
-  quantity INT DEFAULT 1,
-  PRIMARY KEY (item_id, ingredient_id),
-  FOREIGN KEY (item_id) REFERENCES MenuItems(item_id) ON DELETE CASCADE,
-  FOREIGN KEY (ingredient_id) REFERENCES Ingredients(ingredient_id) ON DELETE RESTRICT
+  amount DECIMAL(10,2),
+  PRIMARY KEY (menu_item_id, ingredient_id),
+  FOREIGN KEY (menu_item_id) REFERENCES MenuItems(item_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (ingredient_id) REFERENCES Ingredients(ingredient_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
 
 CREATE TABLE IF NOT EXISTS Customers (
   customer_id INT AUTO_INCREMENT PRIMARY KEY,
