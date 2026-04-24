@@ -2,6 +2,10 @@
 
 #include "SQLDatabase.hpp"
 
+#include <vector>
+
+#include "Ingredient.hpp"
+
 class CafeDatabase : public SQLDatabase
 {
     public:
@@ -12,6 +16,8 @@ class CafeDatabase : public SQLDatabase
         void ResetSQLDatabase();
 
         void AddIngredient(std::string label, float amount);
+
+        void AddMenuItem(std::string title, float price, std::vector<Ingredient> ingredients);
 };
 
 extern CafeDatabase cafeDatabase;
