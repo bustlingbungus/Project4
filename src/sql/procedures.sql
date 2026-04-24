@@ -1,10 +1,9 @@
 DELIMITER $$
 
--- Procedure: add_ingredient(IN p_label, IN p_amount, OUT p_ingredient_id)
+-- Procedure: add_ingredient(IN p_label, IN p_amount)
 CREATE PROCEDURE add_ingredient(
   IN p_label VARCHAR(255),
-  IN p_amount DECIMAL(10,2),
-  OUT p_ingredient_id INT
+  IN p_amount DECIMAL(10,2)
 )
 BEGIN
   DECLARE existing_id INT;
@@ -19,22 +18,19 @@ BEGIN
     UPDATE Ingredients 
     SET amount =  p_amount 
     WHERE ingredient_id = existing_id;
-    SET p_ingredient_id = existing_id;
   ELSE
     INSERT INTO Ingredients(label, amount) VALUES (LOWER(p_label), p_amount);
-    SET p_ingredient_id = LAST_INSERT_ID();
   END IF;
 END$$
 
 
 
--- Procedure: add_menu_item(IN p_title, IN p_price, IN p_ingredients_json, OUT p_item_id)
+-- Procedure: add_menu_item(IN p_title, IN p_price, IN p_ingredients_json)
 -- p_ingredients_json example: '[{"label":"Flour","amount":100.0},{"label":"Sugar","amount":20.5}]'
 CREATE PROCEDURE add_menu_item(
   IN p_title VARCHAR(255),
   IN p_price DECIMAL(5,2),
-  IN p_ingredients_json JSON,
-  OUT p_item_id INT
+  IN p_ingredients_json JSON
 )
 BEGIN
   DECLARE idx INT DEFAULT 0;
@@ -42,10 +38,11 @@ BEGIN
   DECLARE ing_label VARCHAR(255);
   DECLARE ing_amount DECIMAL(10,2);
   DECLARE ing_id INT;
+  DECLARE it_id INT;
 
   -- Insert menu item
   INSERT INTO MenuItems(title, price) VALUES (LOWER(p_title), p_price);
-  SET p_item_id = LAST_INSERT_ID();
+  SET it_id = LAST_INSERT_ID();
 
   -- iterate JSON array
   SET cnt = JSON_LENGTH(p_ingredients_json);
@@ -63,7 +60,7 @@ BEGIN
     -- insert junction row (if exists, update amount)
     IF ing_id IS NOT NULL THEN 
       INSERT INTO MenuItemIngredients(menu_item_id, ingredient_id, amount)
-      VALUES (p_item_id, ing_id, ing_amount)
+      VALUES (it_id, ing_id, ing_amount)
       ON DUPLICATE KEY UPDATE amount = VALUES(amount);
     END IF;
 

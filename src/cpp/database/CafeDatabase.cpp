@@ -69,7 +69,7 @@ void CafeDatabase::AddIngredient(std::string label, float amount)
         "-p",
         "cafe_db",
         "-e",
-        "\"CALL add_ingredient(\'"+label+"\',"+std::to_string(amount)+",@unused);\"",
+        "\"CALL add_ingredient(\'"+label+"\',"+std::to_string(amount)+");\"",
         "--password="+sql_password
     };
 
@@ -99,7 +99,7 @@ void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingre
         escaped_json.insert(pos, "\\");
         pos += 2;
     }
-    sql += "CAST('" + escaped_json + "' AS JSON), @unused);";
+    sql += "CAST('" + escaped_json + "' AS JSON));";
 
     std::string sqlValue = "\"" + sql + "\"";
 
