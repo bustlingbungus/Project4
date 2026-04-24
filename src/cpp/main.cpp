@@ -10,9 +10,22 @@ int main(int argc, char** argv)
     {
         if (std::string(argv[1]) == "init")
         {
+            std::cout << "Initializing database...\n";
             cafeDatabase.ResetSQLDatabase();
+            std::cout << "Initialization complete.\n";
         }
     }
+
+    cafeDatabase.AddSale(
+        "coffee", 
+        (Customer){"janedoe@gmail.com","8131231234","Jane Doe"},
+        (Date){9,11,2001}
+    );
+    cafeDatabase.AddSale(
+        "coffee", 
+        (Customer){"janedoe@gmail.com","8131231234","Jane Doe"},
+        (Date){9,12,2001}
+    );
 
     cafeDatabase.RunSQLFile("cafe_queries.sql");
 }

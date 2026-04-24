@@ -6,6 +6,7 @@
 #include "../sys/systemcall.hpp"
 
 
+
 CafeDatabase cafeDatabase;
 
 
@@ -114,4 +115,26 @@ void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingre
     };
 
     RunCommands("mysql", cmdarr);
+}
+
+
+void CafeDatabase::AddSale(std::string item_sold, Customer customer, Date date)
+{
+    std::string func_str = "\"CALL add_sale(\'"+item_sold+"\',"+
+        "\'"+std::to_string(date.year)+"-"+std::to_string(date.month)+"-"+std::to_string(date.day)+"\'"+
+        ",\'"+customer.email+"\',\'"+customer.phone_number+"\',\'"+customer.name+"\');\"";
+
+    std::string cmd = "mysql";
+    std::vector<std::string> cmdarr = {
+        cmd,
+        "-u",
+        sql_username,
+        "-p",
+        "cafe_db",
+        "-e",
+        func_str,
+        "--password="+sql_password
+    };
+
+    RunCommands(cmd ,cmdarr);
 }

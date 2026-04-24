@@ -16,7 +16,9 @@ BEGIN
 
   IF existing_id IS NOT NULL THEN
     -- update amount if desired
-    UPDATE Ingredients SET amount = amount + p_amount WHERE ingredient_id = existing_id;
+    UPDATE Ingredients 
+    SET amount =  p_amount 
+    WHERE ingredient_id = existing_id;
     SET p_ingredient_id = existing_id;
   ELSE
     INSERT INTO Ingredients(label, amount) VALUES (LOWER(p_label), p_amount);
@@ -68,5 +70,67 @@ BEGIN
     SET idx = idx + 1;
   END WHILE;
 END$$
+
+
+CREATE PROCEDURE add_sale(
+  IN p_menu_item VARCHAR(255),
+  IN p_date DATE,
+  IN p_customer_email VARCHAR(255),
+  IN p_customer_phone VARCHAR(255),
+  IN p_customer_name VARCHAR(255)
+)
+BEGIN
+
+  DECLARE it_id INT;
+  DECLARE c_id INT;
+  DECLARE pts INT;
+
+  -- get menu id number
+  SELECT item_id
+  INTO it_id
+  FROM menuitems
+  WHERE title = LOWER(p_menu_item)
+  LIMIT 1;
+
+  IF it_id IS NOT NULL THEN
+
+    -- get sale points
+    SELECT CEIL(price)
+    INTO pts
+    FROM menuitems
+    WHERE item_id = it_id
+    LIMIT 1;
+
+
+    -- get customer id number
+    SELECT customer_id
+    INTO c_id
+    FROM customers
+    WHERE email = LOWER(p_customer_email)
+    LIMIT 1;
+
+    IF c_id IS NULL THEN -- customer not in database, add them
+      INSERT INTO customers(name, email, phone_num, points)
+      VALUES (LOWER(p_customer_name), LOWER(p_customer_email), LOWER(p_customer_phone), pts);
+      SET c_id = LAST_INSERT_ID();
+    ELSE -- customer exists, increment their points
+      UPDATE customers 
+      SET points = points + pts
+      WHERE customer_id = c_id;
+    END IF;
+
+    INSERT INTO sales(item_id, date, customer_id)
+    VALUES (it_id, p_date, c_id);
+
+
+    -- subtract ingredient amounts used by the menu item
+    UPDATE Ingredients I
+    JOIN MenuItemIngredients m ON I.ingredient_id = m.ingredient_id
+    SET I.amount = I.amount - m.amount
+    WHERE m.menu_item_id = it_id;
+
+  END IF;
+END$$
+
 
 DELIMITER ;
