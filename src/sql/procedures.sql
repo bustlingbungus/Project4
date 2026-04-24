@@ -11,7 +11,7 @@ BEGIN
 
   SELECT ingredient_id INTO existing_id
   FROM Ingredients
-  WHERE label = p_label
+  WHERE label = LOWER(p_label)
   LIMIT 1;
 
   IF existing_id IS NOT NULL THEN
@@ -19,7 +19,7 @@ BEGIN
     UPDATE Ingredients SET amount = amount + p_amount WHERE ingredient_id = existing_id;
     SET p_ingredient_id = existing_id;
   ELSE
-    INSERT INTO Ingredients(label, amount) VALUES (p_label, p_amount);
+    INSERT INTO Ingredients(label, amount) VALUES (LOWER(p_label), p_amount);
     SET p_ingredient_id = LAST_INSERT_ID();
   END IF;
 END$$
@@ -42,7 +42,7 @@ BEGIN
   DECLARE ing_id INT;
 
   -- Insert menu item
-  INSERT INTO MenuItems(title, price) VALUES (p_title, p_price);
+  INSERT INTO MenuItems(title, price) VALUES (LOWER(p_title), p_price);
   SET p_item_id = LAST_INSERT_ID();
 
   -- iterate JSON array
@@ -52,12 +52,18 @@ BEGIN
     SET ing_amount = JSON_EXTRACT(p_ingredients_json, CONCAT('$[', idx, '].amount'));
 
     -- insert or get ingredient id (reuse add_ingredient)
-    CALL add_ingredient(ing_label, ing_amount, ing_id);
+    SELECT ingredient_id
+    INTO ing_id
+    FROM Ingredients
+    WHERE label = LOWER(ing_label)
+    LIMIT 1;
 
     -- insert junction row (if exists, update amount)
-    INSERT INTO MenuItemIngredients(menu_item_id, ingredient_id, amount)
-    VALUES (p_item_id, ing_id, ing_amount)
-    ON DUPLICATE KEY UPDATE amount = VALUES(amount);
+    IF ing_id IS NOT NULL THEN 
+      INSERT INTO MenuItemIngredients(menu_item_id, ingredient_id, amount)
+      VALUES (p_item_id, ing_id, ing_amount)
+      ON DUPLICATE KEY UPDATE amount = VALUES(amount);
+    END IF;
 
     SET idx = idx + 1;
   END WHILE;
