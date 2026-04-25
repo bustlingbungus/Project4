@@ -33,6 +33,8 @@ bool RegisterPage::HandleCommands()
     else if (cmdarr[0] == "goto") cmd_goto();
     else if (cmdarr[0] == "addsale") cmd_addsale();
     else if (cmdarr[0] == "addcustomer") cmd_addcustomer();
+    else if (cmdarr[0] == "viewsales") cmd_viewsales();
+    else if (cmdarr[0] == "refundsale") cmd_refundsale();
     else {
         std::cerr << "Unrecognized command \'"+cmdarr[0]+"\'. Enter \'help\' for a list of commands.\n";
     }
@@ -56,6 +58,10 @@ void RegisterPage::cmd_help()
         std::cout <<    "\nWelcome to the register. Here are a list of commands:\n\n"<<
                         "help\t\t-\tShow this page\n"<<
                         "exit\t\t-\tExit the application\n"<<
+                        "viewsales\t-\tview all logged sales\n"<<
+                        "refundsale <arg>\t-\tRefunds a sale, removing it from the reigster\n"<<
+                        "<arguments>\n"<<
+                        "- arg1: sale id. user \'viewsales\' to find the id of the sale you want to refund\n"<<
                         "addsale <args>\t-\tTender a sale to a customer. Add arguments to log the sale\n"<<
                         "<arguments>\n"<<
                         "- arg1: item sold\n"<<
@@ -111,5 +117,23 @@ void RegisterPage::cmd_addcustomer()
     else
     {
         cafeDatabase.AddCustomer(cmdarr[1], cmdarr[2], cmdarr[3]);
+    }
+}
+
+
+void RegisterPage::cmd_viewsales()
+{
+    if (cmdarr.size() > 1) std::cerr << "Invalid argument count for \'viewsales\' command.\n";
+    else {
+        cafeDatabase.QuerySales();
+    }
+}
+
+
+void RegisterPage::cmd_refundsale()
+{
+    if (cmdarr.size() != 2) std::cerr << "Invalid argument count for \'refundsale\' command.\n";
+    else {
+        cafeDatabase.RefundSale(std::stoi(cmdarr[1]));
     }
 }

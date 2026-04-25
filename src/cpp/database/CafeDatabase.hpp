@@ -20,12 +20,11 @@ class CafeDatabase : public SQLDatabase
         void ResetSQLDatabase();
 
         void AddIngredient(std::string label, float amount);
-
         void AddMenuItem(std::string title, float price, std::vector<Ingredient> ingredients);
-
         void AddSale(std::string item_sold, Date date, std::string customer_phone = "NULL");
-
         void AddCustomer(std::string name, std::string email, std::string phone);
+
+        void RefundSale(int sale_id);
 
         void QueryIngredients();
         void QueryMenu();

@@ -30,6 +30,7 @@ void CafeDatabase::ResetSQLDatabase()
     RunSQLFile("cafe_db.sql");
     // create procedures
     RunSQLFile("add_procedures.sql");
+    RunSQLFile("remove_procedures.sql");
     RunSQLFile("query_procedures.sql");
 
     // add initial table entries
@@ -121,7 +122,15 @@ void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingre
 
 void CafeDatabase::AddSale(std::string item_sold, Date date, std::string customer_phone)
 {
-    std::string date_arg = "\'"+std::to_string(date.year)+"-"+std::to_string(date.month)+"-"+std::to_string(date.day)+"\'";
+    // format date as string
+    std::string yr = std::to_string(date.year);
+    while (yr.size() < 4) yr = "0" + yr;
+    std::string mo = std::to_string(date.month);
+    while (mo.size() < 2) mo = "0" + mo;
+    std::string dy = std::to_string(date.day);
+    while (dy.size() < 2) dy = "0" + dy;
+    std::string date_arg = "\'"+yr+"-"+mo+"-"+dy+"\'";
+
     if (customer_phone != "NULL") customer_phone = "\'"+customer_phone+"\'";
 
     std::string func_str = "\"CALL add_sale(\'"+item_sold+"\',"+date_arg+","+customer_phone+");\"";
@@ -136,6 +145,24 @@ void CafeDatabase::AddSale(std::string item_sold, Date date, std::string custome
         "cafe_db",
         "-e",
         func_str,
+        "--password="+sql_password
+    };
+
+    RunCommands(cmd ,cmdarr);
+}
+
+
+void CafeDatabase::RefundSale(int sale_id)
+{
+    std::string cmd = "mysql";
+    std::vector<std::string> cmdarr = {
+        cmd,
+        "-u",
+        sql_username,
+        "-p",
+        "cafe_db",
+        "-e",
+        "\"CALL remove_sale("+std::to_string(sale_id)+");\"",
         "--password="+sql_password
     };
 
