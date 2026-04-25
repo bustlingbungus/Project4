@@ -32,6 +32,7 @@ bool RegisterPage::HandleCommands()
     else if (cmdarr[0] == "help") cmd_help();
     else if (cmdarr[0] == "goto") cmd_goto();
     else if (cmdarr[0] == "addsale") cmd_addsale();
+    else if (cmdarr[0] == "addcustomer") cmd_addcustomer();
     else {
         std::cerr << "Unrecognized command \'"+cmdarr[0]+"\'. Enter \'help\' for a list of commands.\n";
     }
@@ -62,6 +63,11 @@ void RegisterPage::cmd_help()
                         "- arg3: current day\n"<<
                         "- arg4: current year\n"<<
                         "- arg5: customer's phone number (optional)\n"<<
+                        "addcustomer <args>\t-\tRegister a new customer to our system. Add arguments to save customer information.\n"<<
+                        "<arguments>\n"<<
+                        "- arg1: customer name\n"<<
+                        "- arg2: customer email\n"<<
+                        "- arg3: customer phone number\n"<<
                         "goto <flag>\t-\tGo to another page. Replace <flag> with the name of the desired page.\n"<<
                         "<available pages>\n"<<
                         "- home\n"<<
@@ -95,5 +101,15 @@ void RegisterPage::cmd_goto()
 
         }
         else std::cerr << "Unrecognized page \'"+cmdarr[1]+"\'.\nAvailable pages:\n- home\n- inventory\n";
+    }
+}
+
+
+void RegisterPage::cmd_addcustomer()
+{
+    if (cmdarr.size() != 4) std::cerr << "Invalid argument count for \'addcustomer\' command.\n";
+    else
+    {
+        cafeDatabase.AddCustomer(cmdarr[1], cmdarr[2], cmdarr[3]);
     }
 }

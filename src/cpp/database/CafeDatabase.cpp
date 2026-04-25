@@ -205,3 +205,34 @@ void CafeDatabase::CallFunctionWithoutArgs(std::string function)
 
     RunCommands(cmd ,cmdarr);
 }
+
+
+bool CafeDatabase::validDate(Date date)
+{
+    if (date.month > 12 || date.month <= 0) {
+        std::cerr << "Invalid month\n";
+        return false;
+    } 
+    unsigned int max_day;  
+    // this system does not account for leap years or anything like that.... I really dgaf
+    switch (date.month) {
+        case 1: max_day = 31; // jan
+        case 2: max_day = 28; // feb
+        case 3: max_day = 31; // mar
+        case 4: max_day = 30; // apr
+        case 5: max_day = 31; // may
+        case 6: max_day = 30; // jun
+        case 7: max_day = 31; // jul
+        case 8: max_day = 31; // aug
+        case 9: max_day = 30; // sep
+        case 10: max_day = 31; // oct
+        case 11: max_day = 30; // nov
+        case 12: max_day = 31; // dec
+    }
+    if (date.day > max_day || date.day <= 0) {
+        std::cerr << "Invalid day\n";
+        return false;
+    }
+
+    return true;
+}

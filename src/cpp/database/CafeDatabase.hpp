@@ -35,6 +35,8 @@ class CafeDatabase : public SQLDatabase
     protected:
 
         void CallFunctionWithoutArgs(std::string function);
+
+        bool validDate(Date date);
 };
 
 extern CafeDatabase cafeDatabase;

@@ -21,6 +21,7 @@ class RegisterPage : public Terminal
         void cmd_help();
         void cmd_goto();
         void cmd_addsale();
+        void cmd_addcustomer();
 
 };
 
