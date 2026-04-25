@@ -91,29 +91,33 @@ BEGIN
 
   IF it_id IS NOT NULL THEN
 
-    -- get sale points
-    SELECT CEIL(price)
-    INTO pts
-    FROM menuitems
-    WHERE item_id = it_id
-    LIMIT 1;
+    IF p_customer_email IS NOT NULL THEN
+
+      -- get sale points
+      SELECT CEIL(price)
+      INTO pts
+      FROM menuitems
+      WHERE item_id = it_id
+      LIMIT 1;
 
 
-    -- get customer id number
-    SELECT customer_id
-    INTO c_id
-    FROM customers
-    WHERE email = LOWER(p_customer_email)
-    LIMIT 1;
+      -- get customer id number
+      SELECT customer_id
+      INTO c_id
+      FROM customers
+      WHERE email = LOWER(p_customer_email)
+      LIMIT 1;
 
-    IF c_id IS NULL THEN -- customer not in database, add them
-      INSERT INTO customers(name, email, phone_num, points)
-      VALUES (LOWER(p_customer_name), LOWER(p_customer_email), LOWER(p_customer_phone), pts);
-      SET c_id = LAST_INSERT_ID();
-    ELSE -- customer exists, increment their points
-      UPDATE customers 
-      SET points = points + pts
-      WHERE customer_id = c_id;
+      IF c_id IS NULL THEN -- customer not in database, add them
+        INSERT INTO customers(name, email, phone_num, points)
+        VALUES (LOWER(p_customer_name), LOWER(p_customer_email), LOWER(p_customer_phone), pts);
+        SET c_id = LAST_INSERT_ID();
+      ELSE -- customer exists, increment their points
+        UPDATE customers 
+        SET points = points + pts
+        WHERE customer_id = c_id;
+      END IF;
+
     END IF;
 
     INSERT INTO sales(item_id, date, customer_id)

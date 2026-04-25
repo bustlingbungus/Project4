@@ -118,11 +118,19 @@ void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingre
 }
 
 
-void CafeDatabase::AddSale(std::string item_sold, Customer customer, Date date)
+void CafeDatabase::AddSale(std::string item_sold, Date date, Customer* customer)
 {
-    std::string func_str = "\"CALL add_sale(\'"+item_sold+"\',"+
-        "\'"+std::to_string(date.year)+"-"+std::to_string(date.month)+"-"+std::to_string(date.day)+"\'"+
-        ",\'"+customer.email+"\',\'"+customer.phone_number+"\',\'"+customer.name+"\');\"";
+    std::string date_arg = "\'"+std::to_string(date.year)+"-"+std::to_string(date.month)+"-"+std::to_string(date.day)+"\'";
+    std::string customer_args;
+    if (customer == nullptr) {
+        customer_args = "NULL,NULL,NULL";
+    }
+    else {
+        customer_args = "\'"+customer->email+"\',\'"+customer->phone_number+"\',\'"+customer->name+"\'";
+    }
+
+    std::string func_str = "\"CALL add_sale(\'"+item_sold+"\',"+date_arg+","+customer_args+");\"";
+
 
     std::string cmd = "mysql";
     std::vector<std::string> cmdarr = {

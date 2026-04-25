@@ -16,14 +16,14 @@ int main(int argc, char** argv)
         }
     }
 
+    Customer customer = {"janedoe@gmail.com","8131231234","Jane Doe"};
     cafeDatabase.AddSale(
         "coffee", 
-        (Customer){"janedoe@gmail.com","8131231234","Jane Doe"},
-        (Date){9,11,2001}
+        (Date){9,11,2001},
+        &customer
     );
     cafeDatabase.AddSale(
         "coffee", 
-        (Customer){"janedoe@gmail.com","8131231234","Jane Doe"},
         (Date){9,12,2001}
     );
 
