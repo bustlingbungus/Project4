@@ -16,7 +16,7 @@ int main(int argc, char** argv)
         }
     }
 
-    Customer customer = {"janedoe@gmail.com","8131231234","Jane Doe"};
+    cafeDatabase.AddCustomer("Jane Doe", "janedoe@gmail.com", "8131231234");
     cafeDatabase.AddSale(
         "coffee", 
         (Date){9,11,2001},

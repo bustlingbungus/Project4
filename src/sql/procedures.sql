@@ -128,4 +128,14 @@ BEGIN
 END$$
 
 
+CREATE PROCEDURE add_customer(
+  IN p_name VARCHAR(255),
+  IN p_email VARCHAR(255),
+  IN p_phone VARCHAR(255)
+)
+BEGIN
+  INSERT INTO customers(name, email, phone_num)
+  VALUES (LOWER(p_name), LOWER(p_email), p_phone);
+END$$
+
 DELIMITER ;

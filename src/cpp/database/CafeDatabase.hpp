@@ -24,6 +24,8 @@ class CafeDatabase : public SQLDatabase
         void AddMenuItem(std::string title, float price, std::vector<Ingredient> ingredients);
 
         void AddSale(std::string item_sold, Date date, std::string customer_phone = "NULL");
+
+        void AddCustomer(std::string name, std::string email, std::string phone);
 };
 
 extern CafeDatabase cafeDatabase;

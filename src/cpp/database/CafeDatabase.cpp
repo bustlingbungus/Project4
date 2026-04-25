@@ -140,3 +140,21 @@ void CafeDatabase::AddSale(std::string item_sold, Date date, std::string custome
 
     RunCommands(cmd ,cmdarr);
 }
+
+
+void CafeDatabase::AddCustomer(std::string name, std::string email, std::string phone)
+{
+    std::string cmd = "mysql";
+    std::vector<std::string> cmdarr = {
+        cmd,
+        "-u",
+        sql_username,
+        "-p",
+        "cafe_db",
+        "-e",
+        "\"CALL add_customer(\'"+name+"\',\'"+email+"\',\'"+phone+"\');\"",
+        "--password="+sql_password
+    };
+
+    RunCommands(cmd ,cmdarr);
+}
