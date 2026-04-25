@@ -30,6 +30,7 @@ void CafeDatabase::ResetSQLDatabase()
     RunSQLFile("cafe_db.sql");
     // create procedures
     RunSQLFile("add_procedures.sql");
+    RunSQLFile("query_procedures.sql");
 
     // add initial table entries
 
@@ -144,6 +145,10 @@ void CafeDatabase::AddSale(std::string item_sold, Date date, std::string custome
 
 void CafeDatabase::AddCustomer(std::string name, std::string email, std::string phone)
 {
+    // normalize phone number
+    std::string p = "";
+    for (char& ch : phone) if (isdigit(ch)) p += ch;
+
     std::string cmd = "mysql";
     std::vector<std::string> cmdarr = {
         cmd,
@@ -152,7 +157,49 @@ void CafeDatabase::AddCustomer(std::string name, std::string email, std::string 
         "-p",
         "cafe_db",
         "-e",
-        "\"CALL add_customer(\'"+name+"\',\'"+email+"\',\'"+phone+"\');\"",
+        "\"CALL add_customer(\'"+name+"\',\'"+email+"\',\'"+p+"\');\"",
+        "--password="+sql_password
+    };
+
+    RunCommands(cmd ,cmdarr);
+}
+
+
+void CafeDatabase::QueryIngredients()
+{
+    CallFunctionWithoutArgs("query_ingredients");
+}
+
+
+void CafeDatabase::QueryMenu()
+{
+    CallFunctionWithoutArgs("query_menu");
+}
+
+
+void CafeDatabase::QueryCustomers()
+{
+    CallFunctionWithoutArgs("query_customers");
+}
+
+
+void CafeDatabase::QuerySales()
+{
+    CallFunctionWithoutArgs("query_sales");
+}
+
+
+void CafeDatabase::CallFunctionWithoutArgs(std::string function)
+{
+    std::string cmd = "mysql";
+    std::vector<std::string> cmdarr = {
+        cmd,
+        "-u",
+        sql_username,
+        "-p",
+        database,
+        "-e",
+        "\"CALL "+function+"();\"",
         "--password="+sql_password
     };
 

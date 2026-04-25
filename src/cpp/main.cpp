@@ -27,5 +27,9 @@ int main(int argc, char** argv)
         (Date){9,12,2001}
     );
 
-    cafeDatabase.RunSQLFile("cafe_queries.sql");
+    // cafeDatabase.RunSQLFile("cafe_queries.sql");
+    cafeDatabase.QueryIngredients();
+    cafeDatabase.QueryMenu();
+    cafeDatabase.QueryCustomers();
+    cafeDatabase.QuerySales();
 }

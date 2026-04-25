@@ -26,6 +26,15 @@ class CafeDatabase : public SQLDatabase
         void AddSale(std::string item_sold, Date date, std::string customer_phone = "NULL");
 
         void AddCustomer(std::string name, std::string email, std::string phone);
+
+        void QueryIngredients();
+        void QueryMenu();
+        void QueryCustomers();
+        void QuerySales();
+
+    protected:
+
+        void CallFunctionWithoutArgs(std::string function);
 };
 
 extern CafeDatabase cafeDatabase;
