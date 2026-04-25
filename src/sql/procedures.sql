@@ -72,9 +72,7 @@ END$$
 CREATE PROCEDURE add_sale(
   IN p_menu_item VARCHAR(255),
   IN p_date DATE,
-  IN p_customer_email VARCHAR(255),
-  IN p_customer_phone VARCHAR(255),
-  IN p_customer_name VARCHAR(255)
+  IN p_customer_phone VARCHAR(255)
 )
 BEGIN
 
@@ -91,7 +89,7 @@ BEGIN
 
   IF it_id IS NOT NULL THEN
 
-    IF p_customer_email IS NOT NULL THEN
+    IF p_customer_phone IS NOT NULL THEN
 
       -- get sale points
       SELECT CEIL(price)
@@ -105,14 +103,10 @@ BEGIN
       SELECT customer_id
       INTO c_id
       FROM customers
-      WHERE email = LOWER(p_customer_email)
+      WHERE phone_num = p_customer_phone
       LIMIT 1;
 
-      IF c_id IS NULL THEN -- customer not in database, add them
-        INSERT INTO customers(name, email, phone_num, points)
-        VALUES (LOWER(p_customer_name), LOWER(p_customer_email), LOWER(p_customer_phone), pts);
-        SET c_id = LAST_INSERT_ID();
-      ELSE -- customer exists, increment their points
+      IF c_id IS NOT NULL THEN -- customer exists, increment their points
         UPDATE customers 
         SET points = points + pts
         WHERE customer_id = c_id;

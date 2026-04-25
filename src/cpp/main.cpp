@@ -20,7 +20,7 @@ int main(int argc, char** argv)
     cafeDatabase.AddSale(
         "coffee", 
         (Date){9,11,2001},
-        &customer
+        "8131231234"
     );
     cafeDatabase.AddSale(
         "coffee", 
