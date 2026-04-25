@@ -5,12 +5,12 @@
 #include <memory>
 
 
-class HomePage : public Terminal
+class RegisterPage : public Terminal
 {
     public:
 
-        HomePage();
-        ~HomePage();
+        RegisterPage();
+        ~RegisterPage();
 
         virtual bool HandleCommands();
 
@@ -20,6 +20,8 @@ class HomePage : public Terminal
 
         void cmd_help();
         void cmd_goto();
+        void cmd_addsale();
+
 };
 
-extern std::shared_ptr<Terminal> trm_homepage;
+extern std::shared_ptr<Terminal> trm_register;

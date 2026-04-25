@@ -36,25 +36,25 @@ void CafeDatabase::ResetSQLDatabase()
 
     // ingredients
     AddIngredient("Sugar", 10.00);
-    AddIngredient("coffee grounds", 15.00);
-    AddIngredient("tea leaves", 4.00);
+    AddIngredient("coffee_grounds", 15.00);
+    AddIngredient("tea_leaves", 4.00);
     AddIngredient("milk", 16.00);
     AddIngredient("creamer", 8.00);
-    AddIngredient("almond milk", 8.00);
+    AddIngredient("almond_milk", 8.00);
 
     // menu items
     AddMenuItem("Coffee", 2.50, {
-        (Ingredient){"coffee grounds",  0.25    },
+        (Ingredient){"coffee_grounds",  0.25    },
         (Ingredient){"creamer",         0.5     },
         (Ingredient){"sugar",           0.1     }
     });
     
-    AddMenuItem("espresso shot", 1.00, {
-        (Ingredient){"coffee grounds",  0.25    },
+    AddMenuItem("espresso_shot", 1.00, {
+        (Ingredient){"coffee_grounds",  0.25    },
     });
 
-    AddMenuItem("sweet green tea", 3.00, {
-        (Ingredient){"tea leaves",      0.1     },
+    AddMenuItem("sweet_tea", 3.00, {
+        (Ingredient){"tea_leaves",      0.1     },
         (Ingredient){"sugar",           0.3     }
     });
 }
