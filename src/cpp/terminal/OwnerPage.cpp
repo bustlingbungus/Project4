@@ -22,6 +22,12 @@ OwnerPage::~OwnerPage()
 }
 
 
+void OwnerPage::PreInputLog()
+{
+    std::cout << "Owner> ";
+}
+
+
 bool OwnerPage::HandleCommands()
 {
     if (cmdarr.size() == 0) return false;
@@ -43,6 +49,7 @@ bool OwnerPage::HandleCommands()
     else if (cmdarr[0] == "removemenu") cmd_removemenuitem();
     else if (cmdarr[0] == "removecustomer") cmd_removecustomer();
     else if (cmdarr[0] == "refund") cmd_refundsale();
+    else if (cmdarr[0] == "addingredient") cmd_addingredient();
     else {
         std::cerr << "Unrecognized command \'"+cmdarr[0]+"\'. Enter \'help\' for a list of commands.\n";
     }
@@ -128,5 +135,67 @@ void OwnerPage::cmd_setinventory_amount()
     if (cmdarr.size() != 3) std::cerr << "Invalid argument count for \'setamount\' command\n";
     else {
         cafeDatabase.AddIngredient(cmdarr[1], std::stof(cmdarr[2]));
+    }
+}
+
+
+void OwnerPage::cmd_removeinventoryitem()
+{
+    if (cmdarr.size() != 2) std::cerr << "Invalid argument count for \'removeinventory\' command\n";
+    else {
+        cafeDatabase.RemoveIngredient(cmdarr[1]);
+    }
+}
+
+
+void OwnerPage::cmd_addmenuitem()
+{
+    if (cmdarr.size() < 3) std::cerr << "Too few arguments for \'addmenu\' command.\n";
+    else
+    {
+        std::vector<Ingredient> ingredients;
+        for (int i = 4; i < cmdarr.size(); i += 2)
+        {
+            Ingredient ing = {cmdarr[i - 1], std::stof(cmdarr[i])};
+            ingredients.push_back(ing);
+        }
+
+        cafeDatabase.AddMenuItem(cmdarr[1], std::stof(cmdarr[2]), ingredients);
+    }
+}
+
+
+void OwnerPage::cmd_removemenuitem()
+{
+    if (cmdarr.size() != 2) std::cerr << "Incorrect argument count for \'removemenu\' command.\n";
+    else {
+        cafeDatabase.RemoveMenuItem(cmdarr[1]);
+    }
+}
+
+
+void OwnerPage::cmd_removecustomer()
+{
+    if (cmdarr.size() != 2) std::cerr << "Incorrect argument count for \'removecustomer\' command.\n";
+    else {
+        cafeDatabase.RemoveCustomer(cmdarr[1]);
+    }
+}
+
+
+void OwnerPage::cmd_refundsale()
+{
+    if (cmdarr.size() != 2) std::cerr << "Incorrect argument count for \'refund\' command.\n";
+    else {
+        cafeDatabase.RefundSale(std::stoi(cmdarr[1]));
+    }
+}
+
+
+void OwnerPage::cmd_addingredient()
+{
+    if (cmdarr.size() != 4) std::cerr << "Incorrect argument count for \'addingredient\' command.\n";
+    else {
+        cafeDatabase.AddIngredient(cmdarr[1], cmdarr[2], std::stof(cmdarr[3]));
     }
 }

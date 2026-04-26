@@ -143,4 +143,43 @@ BEGIN
   VALUES (LOWER(p_name), LOWER(p_email), p_phone);
 END$$
 
+
+CREATE PROCEDURE add_menuitemingredient(
+  IN p_item_name VARCHAR(255),
+  IN p_ing_name VARCHAR(255),
+  IN p_amount FLOAT
+)
+BEGIN
+  DECLARE it_id INT;
+  DECLARE ing_id INT;
+  DECLARE existing_amt INT;
+
+  SELECT item_id
+  INTO it_id
+  FROM menuitems
+  WHERE title = p_item_name
+  LIMIT 1;
+  IF it_id IS NOT NULL THEN
+    SELECT ingredient_id
+    INTO ing_id
+    FROM ingredients
+    WHERE label = p_ing_name
+    LIMIT 1;
+    IF ing_id IS NOT NULL THEN
+      SELECT amount
+      INTO existing_amt
+      FROM menuitemingredients
+      WHERE menu_item_id = it_id AND ingredient_id = ing_id;
+      IF existing_amt IS NOT NULL THEN
+        UPDATE menuitemingredients
+        SET amount = p_amount
+        WHERE menu_item_id = it_id AND ingredient_id = ing_id;
+      ELSE
+        INSERT INTO menuitemingredients(menu_item_id, ingredient_id, amount)
+        VALUES (it_id, ing_id, p_amount);
+      END IF;
+    END IF;
+  END IF;
+END$$
+
 DELIMITER ;

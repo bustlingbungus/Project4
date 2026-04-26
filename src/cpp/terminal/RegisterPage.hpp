@@ -18,13 +18,13 @@ class RegisterPage : public Terminal
 
         virtual void PreInputLog();
 
-        void cmd_help();
-        void cmd_goto();
-        void cmd_addsale();
-        void cmd_addcustomer();
-        void cmd_viewsales();
-        void cmd_refundsale();
-        void cmd_viewmenu();
+        void cmd_help(); // help
+        void cmd_goto(); // goto
+        void cmd_addsale(); // addsale, item, month, day, year, (phone)
+        void cmd_addcustomer(); // addcustomer, name, email, phone
+        void cmd_viewsales(); // viewsales
+        void cmd_refundsale(); // refundsale, sale_id
+        void cmd_viewmenu(); // viewmenu
 
 };
 

@@ -3,6 +3,8 @@
 #include <iostream>
 
 #include "RegisterPage.hpp"
+#include "InventoryPage.hpp"
+#include "OwnerPage.hpp"
 #include "../Init.hpp"
 
 std::shared_ptr<Terminal> trm_homepage;
@@ -71,7 +73,10 @@ void HomePage::cmd_goto()
             terminal = trm_register;
         }
         else if (cmdarr[1] == "inventory") {
-
+            terminal = trm_inventory;
+        }
+        else if (cmdarr[1] == "owner") {
+            terminal = trm_owner;
         }
         else std::cerr << "Unrecognized page \'"+cmdarr[1]+"\'.\nAvailable pages:\n- register\n- inventory\n";
     }

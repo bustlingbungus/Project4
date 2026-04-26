@@ -115,9 +115,31 @@ void CafeDatabase::AddSale(std::string item_sold, Date date, std::string custome
 }
 
 
+void CafeDatabase::AddIngredient(std::string item_name, std::string ingredient, float amount)
+{
+    ExecSQL("\"CALL add_menuitemingredient(\'"+item_name+"\',\'"+ingredient+"\',"+std::to_string(amount)+");\"");
+}
+
+
 void CafeDatabase::RefundSale(int sale_id)
 {
     ExecSQL("\"CALL remove_sale("+std::to_string(sale_id)+");\"");
+}
+
+
+void CafeDatabase::RemoveIngredient(std::string ing_name)
+{
+    ExecSQL("\"CALL remove_ingredient(\'"+ing_name+"\');\"");
+}
+
+void CafeDatabase::RemoveMenuItem(std::string item_name)
+{
+    ExecSQL("\"CALL remove_menu_item(\'"+item_name+"\');\"");
+}
+
+void CafeDatabase::RemoveCustomer(std::string phone_number)
+{
+    ExecSQL("\"CALL remove_customer(\'"+phone_number+"\');\"");
 }
 
 

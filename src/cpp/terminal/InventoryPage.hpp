@@ -18,14 +18,14 @@ class InventoryPage : public Terminal
 
         virtual void PreInputLog();
 
-        void cmd_help();
-        void cmd_goto();
-        void cmd_inventory();
-        void cmd_viewmenu();
-        void cmd_viewmenuingredients();
-        void cmd_viewsales();
+        void cmd_help(); // help
+        void cmd_goto(); // goto
+        void cmd_inventory(); // inventory
+        void cmd_viewmenu(); // viewmenu
+        void cmd_viewmenuingredients(); // viewingredients
+        void cmd_viewsales(); // viewsales
 
-        void cmd_setinventory_amount();
+        void cmd_setinventory_amount(); // setamount, name, amount
 };
 
 extern std::shared_ptr<Terminal> trm_inventory;
