@@ -13,6 +13,8 @@ class SQLDatabase
     
     protected:
 
+        void ExecSQL(std::string sql);
+
         std::string sql_source_path = "None";
         std::string sql_username = "None";
         std::string sql_password = "None";

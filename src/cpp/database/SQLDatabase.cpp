@@ -78,6 +78,12 @@ void SQLDatabase::Init()
 
 void SQLDatabase::RunSQLFile(std::string filename)
 {
+    ExecSQL("\"SOURCE " + sql_source_path + "/" + filename + ";\"");
+}
+
+
+void SQLDatabase::ExecSQL(std::string sql)
+{
     std::string cmd = "mysql";
     std::vector<std::string> cmdarr = {
         cmd,
@@ -86,7 +92,7 @@ void SQLDatabase::RunSQLFile(std::string filename)
         "-p",
         database,
         "-e",
-        "\"SOURCE " + sql_source_path + "/" + filename + ";\"",
+        sql,
         "--password=" + sql_password
     };
 

@@ -63,19 +63,7 @@ void CafeDatabase::ResetSQLDatabase()
 
 void CafeDatabase::AddIngredient(std::string label, float amount)
 {
-    std::string cmd = "mysql";
-    std::vector<std::string> cmdarr = {
-        cmd,
-        "-u",
-        sql_username,
-        "-p",
-        "cafe_db",
-        "-e",
-        "\"CALL add_ingredient(\'"+label+"\',"+std::to_string(amount)+");\"",
-        "--password="+sql_password
-    };
-
-    RunCommands(cmd ,cmdarr);
+    ExecSQL("\"CALL add_ingredient(\'"+label+"\',"+std::to_string(amount)+");\"");
 }
 
 
@@ -104,19 +92,7 @@ void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingre
     sql += "CAST('" + escaped_json + "' AS JSON));";
 
     std::string sqlValue = "\"" + sql + "\"";
-
-    std::vector<std::string> cmdarr = {
-        "mysql",
-        "-u", 
-        sql_username,
-        "-p",
-        "cafe_db",
-        "-e",
-        sqlValue,
-        "--password=" + sql_password
-    };
-
-    RunCommands("mysql", cmdarr);
+    ExecSQL(sqlValue);
 }
 
 
@@ -135,38 +111,13 @@ void CafeDatabase::AddSale(std::string item_sold, Date date, std::string custome
 
     std::string func_str = "\"CALL add_sale(\'"+item_sold+"\',"+date_arg+","+customer_phone+");\"";
 
-
-    std::string cmd = "mysql";
-    std::vector<std::string> cmdarr = {
-        cmd,
-        "-u",
-        sql_username,
-        "-p",
-        "cafe_db",
-        "-e",
-        func_str,
-        "--password="+sql_password
-    };
-
-    RunCommands(cmd ,cmdarr);
+    ExecSQL(func_str);
 }
 
 
 void CafeDatabase::RefundSale(int sale_id)
 {
-    std::string cmd = "mysql";
-    std::vector<std::string> cmdarr = {
-        cmd,
-        "-u",
-        sql_username,
-        "-p",
-        "cafe_db",
-        "-e",
-        "\"CALL remove_sale("+std::to_string(sale_id)+");\"",
-        "--password="+sql_password
-    };
-
-    RunCommands(cmd ,cmdarr);
+    ExecSQL("\"CALL remove_sale("+std::to_string(sale_id)+");\"");
 }
 
 
@@ -176,19 +127,7 @@ void CafeDatabase::AddCustomer(std::string name, std::string email, std::string 
     std::string p = "";
     for (char& ch : phone) if (isdigit(ch)) p += ch;
 
-    std::string cmd = "mysql";
-    std::vector<std::string> cmdarr = {
-        cmd,
-        "-u",
-        sql_username,
-        "-p",
-        "cafe_db",
-        "-e",
-        "\"CALL add_customer(\'"+name+"\',\'"+email+"\',\'"+p+"\');\"",
-        "--password="+sql_password
-    };
-
-    RunCommands(cmd ,cmdarr);
+    ExecSQL("\"CALL add_customer(\'"+name+"\',\'"+email+"\',\'"+p+"\');\"");
 }
 
 
@@ -218,19 +157,7 @@ void CafeDatabase::QuerySales()
 
 void CafeDatabase::CallFunctionWithoutArgs(std::string function)
 {
-    std::string cmd = "mysql";
-    std::vector<std::string> cmdarr = {
-        cmd,
-        "-u",
-        sql_username,
-        "-p",
-        database,
-        "-e",
-        "\"CALL "+function+"();\"",
-        "--password="+sql_password
-    };
-
-    RunCommands(cmd ,cmdarr);
+    ExecSQL("\"CALL "+function+"();\"");
 }
 
 
