@@ -6,7 +6,21 @@ CREATE PROCEDURE remove_sale(
 BEGIN
 
     DECLARE cust_id INT;
+    DECLARE it_id INT;
     DECLARE pts INT;
+
+    SELECT item_id
+    INTO it_id
+    FROM sales
+    WHERE sale_id = p_sale_id;
+
+    -- decrement items sold counter
+    IF it_id IS NOT NULL THEN
+        UPDATE menuitems
+        SET items_sold = items_sold - 1
+        WHERE item_id = it_id;
+    END IF;
+
 
     SELECT customer_id
     INTO cust_id

@@ -89,6 +89,11 @@ BEGIN
 
   IF it_id IS NOT NULL THEN
 
+    -- increment items sold
+    UPDATE menuitems
+    SET items_sold = items_sold + 1
+    WHERE item_id = it_id;
+
     IF p_customer_phone IS NOT NULL THEN
 
       -- get sale points
