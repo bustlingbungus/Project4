@@ -155,6 +155,18 @@ void CafeDatabase::QuerySales()
 }
 
 
+void CafeDatabase::QueryMenuItemIngredients()
+{
+    CallFunctionWithoutArgs("query_menuingredients");
+}
+
+
+void CafeDatabase::QuerySaleTotal()
+{
+    CallFunctionWithoutArgs("query_sale_total");
+}
+
+
 void CafeDatabase::CallFunctionWithoutArgs(std::string function)
 {
     ExecSQL("\"CALL "+function+"();\"");

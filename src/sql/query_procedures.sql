@@ -37,4 +37,28 @@ BEGIN
     WHERE sales.item_id = menuitems.item_id;
 END$$
 
+
+CREATE PROCEDURE query_menuingredients(
+
+)
+BEGIN
+    SELECT title, label, menuitemingredients.amount
+    FROM menuitemingredients
+    JOIN menuitems 
+    ON menuitems.item_id = menuitemingredients.menu_item_id
+    JOIN ingredients
+    ON ingredients.ingredient_id = menuitemingredients.ingredient_id;
+END$$
+
+
+CREATE PROCEDURE query_sale_total(
+
+)
+BEGIN
+    SELECT SUM(price)
+    FROM Sales
+    JOIN menuitems
+    ON menuitems.item_id = sales.item_id;
+END$$
+
 DELIMITER ;

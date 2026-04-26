@@ -30,6 +30,8 @@ class CafeDatabase : public SQLDatabase
         void QueryMenu();
         void QueryCustomers();
         void QuerySales();
+        void QueryMenuItemIngredients();
+        void QuerySaleTotal();
 
     protected:
 

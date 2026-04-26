@@ -47,4 +47,28 @@ BEGIN
 
 END$$
 
+
+
+CREATE PROCEDURE remove_ingredient(
+    IN p_label VARCHAR(255)
+)
+BEGIN
+
+    DECLARE ing_id;
+
+
+    SELECT ingredient_id
+    INTO ing_id
+    FROM ingredients
+    WHERE label = p_label
+    LIMIT 1;
+
+    DELETE FROM menuitems
+    JOIN menuitemingredients
+    ON menuitems.item_id = menuitemingredients.menu_item_id
+    WHERE menuitemingredients.ingredientIid = ing_id;
+
+
+END$$
+
 DELIMITER ;

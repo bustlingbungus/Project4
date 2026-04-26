@@ -79,7 +79,6 @@ void RegisterPage::cmd_help()
                         "goto <flag>\t-\tGo to another page. Replace <flag> with the name of the desired page.\n"<<
                         "<available pages>\n"<<
                         "- home\n"<<
-                        "- inventory\n"<<
                         "\n";
     }
 }
@@ -104,9 +103,6 @@ void RegisterPage::cmd_goto()
     {
         if (cmdarr[1] == "home") {
             terminal = trm_homepage;
-        }
-        else if (cmdarr[1] == "inventory") {
-
         }
         else std::cerr << "Unrecognized page \'"+cmdarr[1]+"\'.\nAvailable pages:\n- home\n- inventory\n";
     }
