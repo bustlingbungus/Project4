@@ -59,6 +59,7 @@ void HomePage::cmd_help()
                         "<available pages>\n"<<
                         "- register\n"<<
                         "- inventory\n"<<
+                        "- owner\n"<<
                         "\n";
     }
 }

@@ -61,7 +61,37 @@ bool OwnerPage::HandleCommands()
 
 void OwnerPage::cmd_help()
 {
-
+    if (cmdarr.size() > 1) std::cerr << "Unrecognized argument \'"+cmdarr[1]+"\'.\n";
+    else
+    {
+        std::cout <<    "\nWelcome to the Owner Page. Here are a list of commands:\n\n"<<
+                        "help\t\t-\tShow this page\n"<<
+                        "exit\t\t-\tExit the application\n"<<
+                        "inventory\t-\tShow current amounts of inventory items\n"<<
+                        "viewmenu\t-\tShows the menu items\n"<<
+                        "viewingredients\t-\tShows the ingredients used by each menu item\n"<<
+                        "viewcustomers\t-\tShows all customers on record, as well as how many points they have\n"<<
+                        "viewsales\t-\tShows all sales on record\n"<<
+                        "viewbalance\t-\tShows the sum of all sale prices\n"<<
+                        "setamount <args>\t-\tSet the amount of an inventory item. If the item is not currently in inventory, it will be added\n"<<
+                        "<arguments>\n"<<
+                        "- arg1: Ingredient label\n"<<
+                        "- arg2: amount of the ingredient in stock\n"<<
+                        "removeinventory <args>\t-\tRemove an item from our inventory\n"<<
+                        "<arguments>\n"<<
+                        "- arg1: Name of the item to remove\n"<<
+                        "addmenu <args...>\t-\tAdds an item to the menu\n"<<
+                        "<arguments>\n"<<
+                        "- arg1: Name of the new menu item\n"<<
+                        "- arg2: item price\n"<<
+                        "- arg3: name of ingredient in this item\n"<<
+                        "- arg4: amount of ingredient used\n"<<
+                        "- args 3 and 4 may be repeated as many times as neccesary, for as many ingredients as the item uses.\n"<<
+                        "goto <flag>\t-\tGo to another page. Replace <flag> with the name of the desired page.\n"<<
+                        "<available pages>\n"<<
+                        "- home\n"<<
+                        "\n";
+    }
 }
 
 

@@ -54,7 +54,25 @@ bool InventoryPage::HandleCommands()
 
 void InventoryPage::cmd_help()
 {
-    
+    if (cmdarr.size() > 1) std::cerr << "Unrecognized argument \'"+cmdarr[1]+"\'.\n";
+    else
+    {
+        std::cout <<    "\nWelcome to the Inventory Page. Here are a list of commands:\n\n"<<
+                        "help\t\t-\tShow this page\n"<<
+                        "exit\t\t-\tExit the application\n"<<
+                        "inventory\t-\tShow current amounts of inventory items\n"<<
+                        "viewmenu\t-\tShows the menu items\n"<<
+                        "viewingredients\t-\tShows the ingredients used by each menu item\n"<<
+                        "viewsales\t-\tShows all sales on record\n"<<
+                        "setamount <args>\t-\tSet the amount of an inventory item. If the item is not currently in inventory, it will be added\n"<<
+                        "<arguments>\n"<<
+                        "- arg1: Ingredient label\n"<<
+                        "- arg2: amount of the ingredient in stock\n"<<
+                        "goto <flag>\t-\tGo to another page. Replace <flag> with the name of the desired page.\n"<<
+                        "<available pages>\n"<<
+                        "- home\n"<<
+                        "\n";
+    }
 }
 
 
