@@ -58,6 +58,16 @@ void CafeDatabase::ResetSQLDatabase()
         (Ingredient){"tea_leaves",      0.1     },
         (Ingredient){"sugar",           0.3     }
     });
+
+
+    // customers
+    AddCustomer("john_smith","jsm2323@yahoo.com","8131231234");
+    AddCustomer("ben_steele","bens@usf.edu","8139879876");
+
+    // employees
+    AddEmployee("cafesteve", "mycafe43", "steven_tiras", 3);
+    AddEmployee("dominic", "domf88", "dominic_fresno", 2);
+    AddEmployee("stellaz", "cafejob9", "stella_azam", 1);
 }
 
 
