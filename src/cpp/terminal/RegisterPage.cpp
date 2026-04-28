@@ -3,6 +3,8 @@
 #include <iostream>
 
 #include "HomePage.hpp"
+#include "InventoryPage.hpp"
+#include "OwnerPage.hpp"
 #include "../Init.hpp"
 #include "../database/CafeDatabase.hpp"
 
@@ -59,26 +61,28 @@ void RegisterPage::cmd_help()
         std::cout <<    "\nWelcome to the register. Here are a list of commands:\n\n"<<
                         "help\t\t-\tShow this page\n"<<
                         "exit\t\t-\tExit the application\n"<<
-                        "viewsales\t-\tview all logged sales\n"<<
+                        "\nviewsales\t-\tview all logged sales\n"<<
                         "viewmenu\t-\tview menu items\n"<<
-                        "refundsale <arg>\t-\tRefunds a sale, removing it from the reigster\n"<<
+                        "\nrefundsale <arg>\t-\tRefunds a sale, removing it from the reigster\n"<<
                         "<arguments>\n"<<
                         "- arg1: sale id. user \'viewsales\' to find the id of the sale you want to refund\n"<<
-                        "addsale <args>\t-\tTender a sale to a customer. Add arguments to log the sale\n"<<
+                        "\naddsale <args>\t-\tTender a sale to a customer. Add arguments to log the sale\n"<<
                         "<arguments>\n"<<
                         "- arg1: item sold\n"<<
                         "- arg2: current month\n"<<
                         "- arg3: current day\n"<<
                         "- arg4: current year\n"<<
                         "- arg5: customer's phone number (optional)\n"<<
-                        "addcustomer <args>\t-\tRegister a new customer to our system. Add arguments to save customer information.\n"<<
+                        "\naddcustomer <args>\t-\tRegister a new customer to our system. Add arguments to save customer information.\n"<<
                         "<arguments>\n"<<
                         "- arg1: customer name\n"<<
                         "- arg2: customer email\n"<<
                         "- arg3: customer phone number\n"<<
-                        "goto <flag>\t-\tGo to another page. Replace <flag> with the name of the desired page.\n"<<
+                        "\ngoto <flag>\t-\tGo to another page. Replace <flag> with the name of the desired page.\n"<<
                         "<available pages>\n"<<
                         "- home\n"<<
+                        "- inventory\n"<<
+                        "- owner\n"<<
                         "\n";
     }
 }
@@ -104,7 +108,13 @@ void RegisterPage::cmd_goto()
         if (cmdarr[1] == "home") {
             terminal = trm_homepage;
         }
-        else std::cerr << "Unrecognized page \'"+cmdarr[1]+"\'.\nAvailable pages:\n- home\n- inventory\n";
+        else if (cmdarr[1] == "inventory") {
+            terminal = trm_inventory;
+        }
+        else if (cmdarr[1] == "owner") {
+            terminal = trm_owner;
+        }
+        else std::cerr << "Unrecognized page \'"+cmdarr[1]+"\'.\nAvailable pages:\n- home\n- inventory\n- owner\n";
     }
 }
 

@@ -3,6 +3,8 @@
 #include <iostream>
 
 #include "HomePage.hpp"
+#include "RegisterPage.hpp"
+#include "OwnerPage.hpp"
 #include "../Init.hpp"
 #include "../database/CafeDatabase.hpp"
 
@@ -60,17 +62,19 @@ void InventoryPage::cmd_help()
         std::cout <<    "\nWelcome to the Inventory Page. Here are a list of commands:\n\n"<<
                         "help\t\t-\tShow this page\n"<<
                         "exit\t\t-\tExit the application\n"<<
-                        "inventory\t-\tShow current amounts of inventory items\n"<<
+                        "\ninventory\t-\tShow current amounts of inventory items\n"<<
                         "viewmenu\t-\tShows the menu items\n"<<
                         "viewingredients\t-\tShows the ingredients used by each menu item\n"<<
                         "viewsales\t-\tShows all sales on record\n"<<
-                        "setamount <args>\t-\tSet the amount of an inventory item. If the item is not currently in inventory, it will be added\n"<<
+                        "\nsetamount <args>\t-\tSet the amount of an inventory item. If the item is not currently in inventory, it will be added\n"<<
                         "<arguments>\n"<<
                         "- arg1: Ingredient label\n"<<
                         "- arg2: amount of the ingredient in stock\n"<<
-                        "goto <flag>\t-\tGo to another page. Replace <flag> with the name of the desired page.\n"<<
+                        "\ngoto <flag>\t-\tGo to another page. Replace <flag> with the name of the desired page.\n"<<
                         "<available pages>\n"<<
                         "- home\n"<<
+                        "- register\n"<<
+                        "- owner\n"<<
                         "\n";
     }
 }
@@ -84,7 +88,13 @@ void InventoryPage::cmd_goto()
         if (cmdarr[1] == "home") {
             terminal = trm_homepage;
         }
-        else std::cerr << "Unrecognized page \'"+cmdarr[1]+"\'.\nAvailable pages:\n- home\n- inventory\n";
+        else if (cmdarr[1] == "register") {
+            terminal = trm_register;
+        }
+        else if (cmdarr[1] == "owner") {
+            terminal = trm_owner;
+        }
+        else std::cerr << "Unrecognized page \'"+cmdarr[1]+"\'.\nAvailable pages:\n- home\n- register\n- owner\n";
     }
 }
 

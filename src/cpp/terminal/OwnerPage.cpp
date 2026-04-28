@@ -3,6 +3,8 @@
 #include <iostream>
 
 #include "HomePage.hpp"
+#include "RegisterPage.hpp"
+#include "InventoryPage.hpp"
 #include "../Init.hpp"
 #include "../database/CafeDatabase.hpp"
 
@@ -67,29 +69,45 @@ void OwnerPage::cmd_help()
         std::cout <<    "\nWelcome to the Owner Page. Here are a list of commands:\n\n"<<
                         "help\t\t-\tShow this page\n"<<
                         "exit\t\t-\tExit the application\n"<<
-                        "inventory\t-\tShow current amounts of inventory items\n"<<
+                        "\ninventory\t-\tShow current amounts of inventory items\n"<<
                         "viewmenu\t-\tShows the menu items\n"<<
                         "viewingredients\t-\tShows the ingredients used by each menu item\n"<<
                         "viewcustomers\t-\tShows all customers on record, as well as how many points they have\n"<<
                         "viewsales\t-\tShows all sales on record\n"<<
                         "viewbalance\t-\tShows the sum of all sale prices\n"<<
-                        "setamount <args>\t-\tSet the amount of an inventory item. If the item is not currently in inventory, it will be added\n"<<
+                        "\nsetamount <args>\t-\tSet the amount of an inventory item. If the item is not currently in inventory, it will be added\n"<<
                         "<arguments>\n"<<
                         "- arg1: Ingredient label\n"<<
                         "- arg2: amount of the ingredient in stock\n"<<
-                        "removeinventory <args>\t-\tRemove an item from our inventory\n"<<
+                        "\nremoveinventory <args>\t-\tRemove an item from our inventory\n"<<
                         "<arguments>\n"<<
                         "- arg1: Name of the item to remove\n"<<
-                        "addmenu <args...>\t-\tAdds an item to the menu\n"<<
+                        "\naddmenu <args...>\t-\tAdds an item to the menu\n"<<
                         "<arguments>\n"<<
                         "- arg1: Name of the new menu item\n"<<
                         "- arg2: item price\n"<<
                         "- arg3: name of ingredient in this item\n"<<
                         "- arg4: amount of ingredient used\n"<<
                         "- args 3 and 4 may be repeated as many times as neccesary, for as many ingredients as the item uses.\n"<<
-                        "goto <flag>\t-\tGo to another page. Replace <flag> with the name of the desired page.\n"<<
+                        "\nremovemenu <args>\t-\tRemove an item from the menu\n"<<
+                        "<arguments>\n"<<
+                        "- arg1: Name of the item to remove\n"<<
+                        "\nremovecustomer <args>\t-\tRemove a customer from our record\n"<<
+                        "<arguments>\n"<<
+                        "- arg1: Phone number of the customer to remove\n"<<
+                        "\nrefund <args>\t-\tRefunds a sale. Use \'viewsales\' to find sale ids.\n"<<
+                        "<arguments>\n"<<
+                        "- arg1: id of the sale to refund\n"<<
+                        "\naddingredient <args>\t-\tAdds an ingredient to the recipe of an existing menu item\n"<<
+                        "<arguments>\n"<<
+                        "- arg1: Name of the item you want to add an ingredient to\n"<<
+                        "- arg2: Name of the ingredient to add\n"<<
+                        "- arg3: Amount of the ingredient used in the recipe\n"<<
+                        "\ngoto <flag>\t-\tGo to another page. Replace <flag> with the name of the desired page.\n"<<
                         "<available pages>\n"<<
                         "- home\n"<<
+                        "- register\n"<<
+                        "- inventory\n"<<
                         "\n";
     }
 }
@@ -103,7 +121,13 @@ void OwnerPage::cmd_goto()
         if (cmdarr[1] == "home") {
             terminal = trm_homepage;
         }
-        else std::cerr << "Unrecognized page \'"+cmdarr[1]+"\'.\nAvailable pages:\n- home\n- inventory\n";
+        else if (cmdarr[1] == "register") {
+            terminal = trm_register;
+        }
+        else if (cmdarr[1] == "inventory") {
+            terminal = trm_inventory;
+        }
+        else std::cerr << "Unrecognized page \'"+cmdarr[1]+"\'.\nAvailable pages:\n- home\n- register\n- inventory\n";
     }
 }
 

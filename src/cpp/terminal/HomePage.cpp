@@ -79,6 +79,6 @@ void HomePage::cmd_goto()
         else if (cmdarr[1] == "owner") {
             terminal = trm_owner;
         }
-        else std::cerr << "Unrecognized page \'"+cmdarr[1]+"\'.\nAvailable pages:\n- register\n- inventory\n";
+        else std::cerr << "Unrecognized page \'"+cmdarr[1]+"\'.\nAvailable pages:\n- register\n- inventory\n- owner\n";
     }
 }
