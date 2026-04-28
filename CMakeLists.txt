@@ -17,10 +17,3 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${OUTPUT_DIR}"
     RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${OUTPUT_DIR}"
 )
-
-# Copy settings file from root to build/bin
-set(COPY_FILE "${CMAKE_SOURCE_DIR}/settings.txt")
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy
-    "${COPY_FILE}" "${OUTPUT_DIR}/settings.txt"
-)

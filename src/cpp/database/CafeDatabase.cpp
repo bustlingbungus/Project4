@@ -27,11 +27,11 @@ CafeDatabase::~CafeDatabase()
 void CafeDatabase::ResetSQLDatabase()
 {
     // drops database and creates tables
-    RunSQLFile("cafe_db.sql");
+    ExecSQL("\"SOURCE cafe_db.sql;\"");
     // create procedures
-    RunSQLFile("add_procedures.sql");
-    RunSQLFile("remove_procedures.sql");
-    RunSQLFile("query_procedures.sql");
+    ExecSQL("\"SOURCE add_procedures.sql;\"");
+    ExecSQL("\"SOURCE remove_procedures.sql;\"");
+    ExecSQL("\"SOURCE query_procedures.sql;\"");
 
     // add initial table entries
 

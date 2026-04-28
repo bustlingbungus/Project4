@@ -8,23 +8,10 @@ class SQLDatabase
 
         SQLDatabase(std::string database_name);
         ~SQLDatabase();
-
-        void RunSQLFile(std::string filename);
     
     protected:
-
+        
         void ExecSQL(std::string sql);
 
-        std::string sql_source_path = "None";
-        std::string sql_username = "None";
-        std::string sql_password = "None";
-
         std::string database = "None";
-
-    private:
-
-        void Init();
-
-        bool is_initialized = false;
-
 };
