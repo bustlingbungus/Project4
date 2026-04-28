@@ -1,10 +1,8 @@
 #include <iostream>
 
-#include "sys/systemcall.hpp"
-#include "database/CafeDatabase.hpp"
 #include "terminal/Terminal.hpp"
-
 #include "Init.hpp"
+
 
 int main(int argc, char** argv)
 {

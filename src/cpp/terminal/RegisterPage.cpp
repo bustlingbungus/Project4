@@ -2,9 +2,6 @@
 
 #include <iostream>
 
-#include "HomePage.hpp"
-#include "InventoryPage.hpp"
-#include "OwnerPage.hpp"
 #include "../Init.hpp"
 #include "../database/CafeDatabase.hpp"
 
@@ -105,16 +102,7 @@ void RegisterPage::cmd_goto()
     if (cmdarr.size() != 2) std::cerr << "Invalid argument count for \'goto\' command.\n";
     else
     {
-        if (cmdarr[1] == "home") {
-            terminal = trm_homepage;
-        }
-        else if (cmdarr[1] == "inventory") {
-            terminal = trm_inventory;
-        }
-        else if (cmdarr[1] == "owner") {
-            terminal = trm_owner;
-        }
-        else std::cerr << "Unrecognized page \'"+cmdarr[1]+"\'.\nAvailable pages:\n- home\n- inventory\n- owner\n";
+        Terminal::SwitchToTerminal(cmdarr[1]);
     }
 }
 

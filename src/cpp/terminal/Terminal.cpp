@@ -2,6 +2,16 @@
 
 #include <iostream>
 
+#include "HomePage.hpp"
+#include "RegisterPage.hpp"
+#include "InventoryPage.hpp"
+#include "OwnerPage.hpp"
+
+
+std::shared_ptr<Terminal> terminal;
+
+
+
 Terminal::Terminal()
 {
 
@@ -81,4 +91,53 @@ void Terminal::ParseInputBuffer()
     int len = n - l;
     if (len > 0)
         cmdarr.push_back(input_buffer.substr(l, len));
+}
+
+
+bool Terminal::InitTerminals()
+{
+    trm_homepage = std::make_shared<HomePage>();
+    if (trm_homepage == nullptr) {
+        std::cerr << "Failed to create homepage terminal.\n";
+        return false;
+    }
+    
+    trm_register = std::make_shared<RegisterPage>();
+    if (trm_register == nullptr) {
+        std::cerr << "Failed to create register terminal.\n";
+        return false;
+    }
+    
+    trm_inventory = std::make_shared<InventoryPage>();
+    if (trm_inventory == nullptr) {
+        std::cerr << "Failed to create inventory terminal.\n";
+        return false;
+    }
+    
+    trm_owner = std::make_shared<OwnerPage>();
+    if (trm_owner == nullptr) {
+        std::cerr << "Failed to create owner terminal.\n";
+        return false;
+    }
+
+    terminal = trm_homepage;
+    return true;
+}
+
+
+void Terminal::SwitchToTerminal(std::string trm_name)
+{
+    if (trm_name == "home") {
+        terminal = trm_homepage;
+    }
+    else if (trm_name == "register") {
+        terminal = trm_register;
+    }
+    else if (trm_name == "inventory") {
+        terminal = trm_inventory;
+    }
+    else if (trm_name == "owner") {
+        terminal = trm_owner;
+    }
+    else std::cerr << "Unrecognized page \'"+trm_name+"\'.\nAvailable pages:\n- home\n- register\n- inventory\n- owner\n";
 }

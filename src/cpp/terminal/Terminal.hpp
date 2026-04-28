@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 class Terminal
 {
@@ -17,6 +18,10 @@ class Terminal
 
         virtual bool HandleCommands();
 
+        static bool InitTerminals();
+
+        static void SwitchToTerminal(std::string trm_name);
+
     protected:
 
         virtual void PreInputLog();
@@ -29,3 +34,5 @@ class Terminal
         
         std::string input_buffer;
 };
+
+extern std::shared_ptr<Terminal> terminal;

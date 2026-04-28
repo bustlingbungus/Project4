@@ -2,12 +2,10 @@
 
 #include <iostream>
 
-#include "RegisterPage.hpp"
-#include "InventoryPage.hpp"
-#include "OwnerPage.hpp"
 #include "../Init.hpp"
 
 std::shared_ptr<Terminal> trm_homepage;
+
 
 
 HomePage::HomePage()
@@ -70,15 +68,6 @@ void HomePage::cmd_goto()
     if (cmdarr.size() != 2) std::cerr << "Invalid argument count for \'goto\' command.\n";
     else
     {
-        if (cmdarr[1] == "register") {
-            terminal = trm_register;
-        }
-        else if (cmdarr[1] == "inventory") {
-            terminal = trm_inventory;
-        }
-        else if (cmdarr[1] == "owner") {
-            terminal = trm_owner;
-        }
-        else std::cerr << "Unrecognized page \'"+cmdarr[1]+"\'.\nAvailable pages:\n- register\n- inventory\n- owner\n";
+        Terminal::SwitchToTerminal(cmdarr[1]);
     }
 }
