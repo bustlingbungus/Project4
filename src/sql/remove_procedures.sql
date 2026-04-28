@@ -130,8 +130,25 @@ CREATE PROCEDURE remove_employee(
     IN p_username VARCHAR(255)
 )
 BEGIN
-    DELETE FROM employees
+
+    DECLARE num_owners INT;
+    DECLARE emp_access INT;
+
+    SELECT COUNT(*)
+    INTO num_owners
+    FROM employees
+    WHERE access_type = 3;
+
+    SELECT access_type
+    INTO emp_access
+    FROM employees
     WHERE username = p_username;
+
+    IF emp_access != 3 OR num_owners > 1 THEN
+        DELETE FROM employees
+        WHERE username = p_username;
+    END IF;
+
 END$$
 
 DELIMITER ;
