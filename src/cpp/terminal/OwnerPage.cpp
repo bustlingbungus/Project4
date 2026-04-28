@@ -49,6 +49,9 @@ bool OwnerPage::HandleCommands()
     else if (cmdarr[0] == "removecustomer") cmd_removecustomer();
     else if (cmdarr[0] == "refund") cmd_refundsale();
     else if (cmdarr[0] == "addingredient") cmd_addingredient();
+    else if (cmdarr[0] == "employees") cmd_viewemployees();
+    else if (cmdarr[0] == "addemployee") cmd_addemployee();
+    else if (cmdarr[0] == "removeemployee") cmd_removeemployee();
     else {
         std::cerr << "Unrecognized command \'"+cmdarr[0]+"\'. Enter \'help\' for a list of commands.\n";
     }
@@ -71,6 +74,7 @@ void OwnerPage::cmd_help()
                         "viewingredients\t-\tShows the ingredients used by each menu item\n"<<
                         "viewcustomers\t-\tShows all customers on record, as well as how many points they have\n"<<
                         "viewsales\t-\tShows all sales on record\n"<<
+                        "employees\t-\tShows all employees in system\n"<<
                         "viewbalance\t-\tShows the sum of all sale prices\n"<<
                         "\nsetamount <args>\t-\tSet the amount of an inventory item. If the item is not currently in inventory, it will be added\n"<<
                         "<arguments>\n"<<
@@ -100,6 +104,15 @@ void OwnerPage::cmd_help()
                         "- arg1: Name of the item you want to add an ingredient to\n"<<
                         "- arg2: Name of the ingredient to add\n"<<
                         "- arg3: Amount of the ingredient used in the recipe\n"<<
+                        "\naddemployee <args>\t-\tAdds an employee to the system\n"<<
+                        "<arguments>\n"<<
+                        "- arg1: Employee username\n"<<
+                        "- arg2: Employee password\n"<<
+                        "- arg3: employee name\n"<<
+                        "- arg4: access level. 1 = register, 2 = inventory, 3 = owner\n"<<
+                        "\nremoveemployee <args>\t-\tRemoves an employee from the system\n"<<
+                        "<arguments>\n"<<
+                        "- arg1: Employee username\n"<<
                         "\ngoto <flag>\t-\tGo to another page. Replace <flag> with the name of the desired page.\n"<<
                         "<available pages>\n"<<
                         "- home\n"<<
@@ -162,6 +175,16 @@ void OwnerPage::cmd_viewsales()
         cafeDatabase.QuerySales();
     }
 }
+
+
+void OwnerPage::cmd_viewemployees()
+{
+    if (cmdarr.size() != 1) std::cerr << "Invalid argument count for \'employees\' command.\n";
+    else {
+        cafeDatabase.QueryEmployees();
+    } 
+}
+
 
 void OwnerPage::cmd_viewbalance()
 {
@@ -239,5 +262,23 @@ void OwnerPage::cmd_addingredient()
     if (cmdarr.size() != 4) std::cerr << "Incorrect argument count for \'addingredient\' command.\n";
     else {
         cafeDatabase.AddIngredient(cmdarr[1], cmdarr[2], std::stof(cmdarr[3]));
+    }
+}
+
+
+void OwnerPage::cmd_addemployee()
+{
+    if (cmdarr.size() != 5) std::cerr << "Incorrect argument count for \'addemployee\' command.\n";
+    else {
+        cafeDatabase.AddEmployee(cmdarr[1], cmdarr[2], cmdarr[3], std::stoi(cmdarr[4]));
+    }
+}
+
+
+void OwnerPage::cmd_removeemployee()
+{
+    if (cmdarr.size() != 2) std::cerr << "Incorrect argument count for \'removeemployee\' command.\n";
+    else {
+        cafeDatabase.RemoveEmployee(cmdarr[1]);
     }
 }

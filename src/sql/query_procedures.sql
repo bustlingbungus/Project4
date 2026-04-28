@@ -61,4 +61,12 @@ BEGIN
     ON menuitems.item_id = sales.item_id;
 END$$
 
+
+CREATE PROCEDURE view_employees(
+
+)
+BEGIN
+    SELECT * FROM employees;
+END$$
+
 DELIMITER ;

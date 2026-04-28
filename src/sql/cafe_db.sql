@@ -41,3 +41,11 @@ CREATE TABLE IF NOT EXISTS Sales (
   customer_id INT,
   FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
 );
+
+
+CREATE TABLE IF NOT EXISTS Employees (
+  username VARCHAR(255) PRIMARY KEY,
+  password VARCHAR(255),
+  name VARCHAR(255),
+  access_type INT
+);

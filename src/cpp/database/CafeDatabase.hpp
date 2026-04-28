@@ -24,11 +24,13 @@ class CafeDatabase : public SQLDatabase
         void AddSale(std::string item_sold, Date date, std::string customer_phone = "NULL");
         void AddCustomer(std::string name, std::string email, std::string phone);
         void AddIngredient(std::string item_name, std::string ingredient, float amount);
+        void AddEmployee(std::string username, std::string password, std::string name, int access_type);
 
         void RefundSale(int sale_id);
         void RemoveIngredient(std::string ing_name);
         void RemoveMenuItem(std::string item_name);
         void RemoveCustomer(std::string phone_number);
+        void RemoveEmployee(std::string username);
 
         void QueryIngredients();
         void QueryMenu();
@@ -36,12 +38,11 @@ class CafeDatabase : public SQLDatabase
         void QuerySales();
         void QueryMenuItemIngredients();
         void QuerySaleTotal();
+        void QueryEmployees();
 
     protected:
 
         void CallFunctionWithoutArgs(std::string function);
-
-        bool validDate(Date date);
 };
 
 extern CafeDatabase cafeDatabase;

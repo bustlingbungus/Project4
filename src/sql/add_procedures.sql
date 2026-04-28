@@ -182,4 +182,16 @@ BEGIN
   END IF;
 END$$
 
+
+CREATE PROCEDURE add_employee(
+  IN p_username VARCHAR(255),
+  IN p_password VARCHAR(255),
+  IN p_name VARCHAR(255),
+  IN p_access INT
+)
+BEGIN
+  INSERT INTO employees(username, password, name, access_type)
+  VALUES (p_username, p_password, p_name, p_access);
+END$$
+
 DELIMITER ;

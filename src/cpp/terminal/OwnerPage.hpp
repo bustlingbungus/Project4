@@ -25,6 +25,7 @@ class OwnerPage : public Terminal
         void cmd_viewmenuingredients(); // viewingredients
         void cmd_viewcustomers(); // viewcustomers
         void cmd_viewsales(); // viewsales
+        void cmd_viewemployees(); // employees
 
         void cmd_viewbalance(); // viewbalance
 
@@ -35,6 +36,8 @@ class OwnerPage : public Terminal
         void cmd_removecustomer(); // removecustomer, phone
         void cmd_refundsale(); // refund, sale_id
         void cmd_addingredient(); // addingredient, item, ing, amount
+        void cmd_addemployee(); // addemployee, username, password, name, access
+        void cmd_removeemployee(); // removeemployee, username
 };
 
 extern std::shared_ptr<Terminal> trm_owner;

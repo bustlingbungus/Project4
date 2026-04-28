@@ -125,4 +125,13 @@ BEGIN
     END IF;
 END$$
 
+
+CREATE PROCEDURE remove_employee(
+    IN p_username VARCHAR(255)
+)
+BEGIN
+    DELETE FROM employees
+    WHERE username = p_username;
+END$$
+
 DELIMITER ;

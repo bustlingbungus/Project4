@@ -121,6 +121,12 @@ void CafeDatabase::AddIngredient(std::string item_name, std::string ingredient, 
 }
 
 
+void CafeDatabase::AddEmployee(std::string username, std::string password, std::string name, int access)
+{
+    ExecSQL("\"CALL add_employee(\'"+username+"\',\'"+password+"\',\'"+name+"\',"+std::to_string(access)+");\"");
+}
+
+
 void CafeDatabase::RefundSale(int sale_id)
 {
     ExecSQL("\"CALL remove_sale("+std::to_string(sale_id)+");\"");
@@ -140,6 +146,12 @@ void CafeDatabase::RemoveMenuItem(std::string item_name)
 void CafeDatabase::RemoveCustomer(std::string phone_number)
 {
     ExecSQL("\"CALL remove_customer(\'"+phone_number+"\');\"");
+}
+
+
+void CafeDatabase::RemoveEmployee(std::string username)
+{
+    ExecSQL("\"CALL remove_employee(\'"+username+"\');\"");
 }
 
 
@@ -189,38 +201,13 @@ void CafeDatabase::QuerySaleTotal()
 }
 
 
-void CafeDatabase::CallFunctionWithoutArgs(std::string function)
+void CafeDatabase::QueryEmployees()
 {
-    ExecSQL("\"CALL "+function+"();\"");
+    CallFunctionWithoutArgs("view_employees");
 }
 
 
-bool CafeDatabase::validDate(Date date)
+void CafeDatabase::CallFunctionWithoutArgs(std::string function)
 {
-    if (date.month > 12 || date.month <= 0) {
-        std::cerr << "Invalid month\n";
-        return false;
-    } 
-    unsigned int max_day;  
-    // this system does not account for leap years or anything like that.... I really dgaf
-    switch (date.month) {
-        case 1: max_day = 31; // jan
-        case 2: max_day = 28; // feb
-        case 3: max_day = 31; // mar
-        case 4: max_day = 30; // apr
-        case 5: max_day = 31; // may
-        case 6: max_day = 30; // jun
-        case 7: max_day = 31; // jul
-        case 8: max_day = 31; // aug
-        case 9: max_day = 30; // sep
-        case 10: max_day = 31; // oct
-        case 11: max_day = 30; // nov
-        case 12: max_day = 31; // dec
-    }
-    if (date.day > max_day || date.day <= 0) {
-        std::cerr << "Invalid day\n";
-        return false;
-    }
-
-    return true;
+    ExecSQL("\"CALL "+function+"();\"");
 }
