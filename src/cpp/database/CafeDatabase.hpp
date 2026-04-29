@@ -45,11 +45,9 @@ class CafeDatabase : public SQLDatabase
 
         void CallFunctionWithoutArgs(std::string function);
 
+        Date GetDate(std::time_t date);
 
         Date curr_date;
-
-
-        Date GetDate(std::time_t date);
 };
 
 extern CafeDatabase cafeDatabase;

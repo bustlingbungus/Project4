@@ -73,17 +73,17 @@ int RunCommands(std::string cmd, std::vector<std::string> cmdarr)
 #elif defined(__unix__) || defined(__linux__) || defined(__APPLE__) // unix OS
 
     // convert cmdarr to null a terminated char** array for execv
-    char** c_cmdarr = (char**)malloc((cmdarr.size() + 1) * sizeof(char*));
+    const char** c_cmdarr = (char**)malloc((cmdarr.size() + 1) * sizeof(char*));
     if (c_cmdarr == NULL) {
         std::cerr << "`malloc` failure.\n";
         return -1;
     }
     // copy command array as c strings
     for (int i = 0; i < cmdarr.size(); ++i) c_cmdarr[i] = cmdarr[i].c_str();
-    c_cmdarr[cmdarr.size()] = '\0'; // add null terminator
+    c_cmdarr[cmdarr.size()] = NULL; // add null terminator
 
     // create a new process to call execv in 
-    __pid_t p = fork();
+    pid_t p = fork();
     if (p < 0) 
     {
         std::cerr << "Failed to execute command \'" << cmd << "\'\n";
@@ -95,7 +95,7 @@ int RunCommands(std::string cmd, std::vector<std::string> cmdarr)
         // execute commands in child branch
         if (p == 0)
         {
-            execv(cmd.c_str(), c_cmdarr);
+            execvp(cmd.c_str(), c_cmdarr);
             exit(0);
         }
         // wait for child in parent branch

@@ -13,6 +13,9 @@ CafeDatabase cafeDatabase;
 
 
 
+/**
+ * Pulls the current date and time from user's computer to be stored internally.
+ */
 CafeDatabase::CafeDatabase()
 : SQLDatabase("cafe_db")
 {
@@ -27,6 +30,12 @@ CafeDatabase::~CafeDatabase()
 }
 
 
+/**
+ * Drops the entire database. Recreates the database tables and procedures. Uses sql files placed in the cwd
+ * to do this.
+ * 
+ * Adds some generic data into database tables.
+ */
 void CafeDatabase::ResetSQLDatabase()
 {
     // drops database and creates tables
@@ -74,6 +83,9 @@ void CafeDatabase::ResetSQLDatabase()
 }
 
 
+/**
+ * Adds an ingredient to the inventory table. Calls `add_ingredient` sql function.
+ */
 void CafeDatabase::AddIngredient(std::string label, float amount)
 {
     ExecSQL("\"CALL add_ingredient(\'"+label+"\',"+std::to_string(amount)+");\"");
