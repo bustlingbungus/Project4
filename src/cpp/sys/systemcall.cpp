@@ -107,6 +107,7 @@ int RunCommands(std::string cmd, std::vector<std::string> cmdarr)
     }
 
     free(c_cmdarr);
+    return 0;
 
 #else
     std::cerr << "Unsupported operating system\n";
