@@ -1,6 +1,8 @@
 #include "CafeDatabase.hpp"
 
 #include <iostream>
+#include <sstream>
+#include <chrono>
 
 #include "../sys/fileaccess.hpp"
 #include "../sys/systemcall.hpp"
@@ -14,7 +16,8 @@ CafeDatabase cafeDatabase;
 CafeDatabase::CafeDatabase()
 : SQLDatabase("cafe_db")
 {
-
+    auto t = std::chrono::system_clock::now();
+    curr_date = GetDate(std::chrono::system_clock::to_time_t(t));
 }
 
 
@@ -106,16 +109,10 @@ void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingre
 }
 
 
-void CafeDatabase::AddSale(std::string item_sold, Date date, std::string customer_phone)
+void CafeDatabase::AddSale(std::string item_sold, std::string customer_phone)
 {
     // format date as string
-    std::string yr = std::to_string(date.year);
-    while (yr.size() < 4) yr = "0" + yr;
-    std::string mo = std::to_string(date.month);
-    while (mo.size() < 2) mo = "0" + mo;
-    std::string dy = std::to_string(date.day);
-    while (dy.size() < 2) dy = "0" + dy;
-    std::string date_arg = "\'"+yr+"-"+mo+"-"+dy+"\'";
+    std::string date_arg = "\'"+std::to_string(curr_date.year)+"-"+std::to_string(curr_date.month)+"-"+std::to_string(curr_date.day)+"\'";
 
     if (customer_phone != "NULL") customer_phone = "\'"+customer_phone+"\'";
 
@@ -220,4 +217,41 @@ void CafeDatabase::QueryEmployees()
 void CafeDatabase::CallFunctionWithoutArgs(std::string function)
 {
     ExecSQL("\"CALL "+function+"();\"");
+}
+
+
+Date CafeDatabase::GetDate(std::time_t date)
+{
+    std::istringstream iss(std::ctime(&date));
+    
+    std::string str;
+    int month;
+    int day;
+    int year;
+
+    // get month
+    iss >> str >> str;
+    if (str == "Jan") month = 1;
+    else if (str == "Feb") month = 2;
+    else if (str == "Mar") month = 3;
+    else if (str == "Apr") month = 4;
+    else if (str == "May") month = 5;
+    else if (str == "Jun") month = 6;
+    else if (str == "Jul") month = 7;
+    else if (str == "Aug") month = 8;
+    else if (str == "Sep") month = 9;
+    else if (str == "Oct") month = 10;
+    else if (str == "Nov") month = 11;
+    else if (str == "Dec") month = 12;
+    else month = -1;
+
+    // get day
+    iss >> str;
+    day = std::stoi(str);
+
+    // get year
+    iss >> str >> str;
+    year = std::stoi(str);
+
+    return (Date){month, day, year};
 }

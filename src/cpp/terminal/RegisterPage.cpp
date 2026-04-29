@@ -66,10 +66,7 @@ void RegisterPage::cmd_help()
                         "\naddsale <args>\t-\tTender a sale to a customer. Add arguments to log the sale\n"<<
                         "<arguments>\n"<<
                         "- arg1: item sold\n"<<
-                        "- arg2: current month\n"<<
-                        "- arg3: current day\n"<<
-                        "- arg4: current year\n"<<
-                        "- arg5: customer's phone number (optional)\n"<<
+                        "- arg2: customer's phone number (optional)\n"<<
                         "\naddcustomer <args>\t-\tRegister a new customer to our system. Add arguments to save customer information.\n"<<
                         "<arguments>\n"<<
                         "- arg1: customer name\n"<<
@@ -87,12 +84,11 @@ void RegisterPage::cmd_help()
 
 void RegisterPage::cmd_addsale()
 {
-    if (cmdarr.size() != 5 && cmdarr.size() != 6) std::cerr << "Invalid argument count for \'addsale\' command.\n";
+    if (cmdarr.size() != 2 && cmdarr.size() != 3) std::cerr << "Invalid argument count for \'addsale\' command.\n";
     else
     {
-        Date date = {std::stoi(cmdarr[2]),std::stoi(cmdarr[3]),std::stoi(cmdarr[4])};
-        if (cmdarr.size() == 5) cafeDatabase.AddSale(cmdarr[1], date);
-        else cafeDatabase.AddSale(cmdarr[1], date, cmdarr[5]);
+        if (cmdarr.size() == 2) cafeDatabase.AddSale(cmdarr[1]);
+        else cafeDatabase.AddSale(cmdarr[1], cmdarr[2]);
     }
 }
 
