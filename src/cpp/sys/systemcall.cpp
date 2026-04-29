@@ -73,7 +73,7 @@ int RunCommands(std::string cmd, std::vector<std::string> cmdarr)
 #elif defined(__unix__) || defined(__linux__) || defined(__APPLE__) // unix OS
 
     // convert cmdarr to null a terminated char** array for execv
-    const char** c_cmdarr = (char**)malloc((cmdarr.size() + 1) * sizeof(char*));
+    const char** c_cmdarr = (const char**)malloc((cmdarr.size() + 1) * sizeof(char*));
     if (c_cmdarr == NULL) {
         std::cerr << "`malloc` failure.\n";
         return -1;
@@ -95,7 +95,7 @@ int RunCommands(std::string cmd, std::vector<std::string> cmdarr)
         // execute commands in child branch
         if (p == 0)
         {
-            execvp(cmd.c_str(), c_cmdarr);
+            execvp(cmd.c_str(), (char* const*)c_cmdarr);
             exit(0);
         }
         // wait for child in parent branch

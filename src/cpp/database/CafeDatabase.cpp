@@ -92,28 +92,35 @@ void CafeDatabase::AddIngredient(std::string label, float amount)
 }
 
 
+/**
+ * Adds an item to the menu with a varying amount of ingredients. Formats the ingredients vector as 
+ * a JSON string, and calls the `add_menu_item` sql function.
+ */
 void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingredient> ingredients)
 {
+    // convert ingredients vector to JSON string
     std::string ingredients_json = "[";
     for (int i = 0; i < ingredients.size(); ++i)
     {
         if (i > 0) ingredients_json += ",";
-
+        // format each ingredient as {"label":"ing_label","amount":ing_amount}
         ingredients_json += "{\"label\":\""+ingredients[i].label+"\",\"amount\":"+std::to_string(ingredients[i].amount)+"}";
     }
     ingredients_json += "]";
 
+    // to conform with formatting on the command line, the JSON double quotes need to be 
+    // formatted as another character 
+    std::string escaped_json = ingredients_json;
+    size_t pos = 0;
+    while ((pos = escaped_json.find('"', pos)) != std::string::npos) {
+        escaped_json.insert(pos, "\\"); // insert '\\' character where the double 
+        pos += 2;
+    }
 
     std::string sql = "CALL add_menu_item(";
     sql += "'" + title + "', ";
     sql += std::to_string(price) + ", ";
-    // escape double quotes for shell double-quoted argument
-    std::string escaped_json = ingredients_json;
-    size_t pos = 0;
-    while ((pos = escaped_json.find('"', pos)) != std::string::npos) {
-        escaped_json.insert(pos, "\\");
-        pos += 2;
-    }
+    
     sql += "CAST('" + escaped_json + "' AS JSON));";
 
     std::string sqlValue = "\"" + sql + "\"";
