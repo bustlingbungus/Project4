@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 
+
 class Terminal
 {
     public:
@@ -31,8 +32,11 @@ class Terminal
     private:
 
         void ParseInputBuffer();
+
+        static bool has_access(std::string dst);
         
         std::string input_buffer;
 };
 
 extern std::shared_ptr<Terminal> terminal;
+extern int user_access;

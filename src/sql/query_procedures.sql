@@ -89,4 +89,39 @@ BEGIN
 
 END$$
 
+
+CREATE PROCEDURE valid_password(
+    IN p_username VARCHAR(255),
+    IN p_password VARCHAR(255)
+)
+BEGIN
+    DECLARE correct_password VARCHAR(255);
+
+    SELECT password
+    INTO correct_password
+    FROM employees
+    WHERE username = p_username
+    LIMIT 1;
+
+    IF correct_password IS NOT NULL THEN
+        IF correct_password = p_password THEN
+            SELECT TRUE AS exists_flag;
+        ELSE
+            SELECT FALSE AS exists_flag;
+        END IF;
+    END IF;
+
+END$$
+
+
+CREATE PROCEDURE get_access(
+    IN p_username VARCHAR(255)
+)
+BEGIN
+    SELECT access_type
+    FROM employees
+    WHERE username = p_username
+    LIMIT 1;
+END$$
+
 DELIMITER ;

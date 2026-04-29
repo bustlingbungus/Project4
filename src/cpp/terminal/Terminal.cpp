@@ -6,9 +6,11 @@
 #include "RegisterPage.hpp"
 #include "InventoryPage.hpp"
 #include "OwnerPage.hpp"
+#include "Login.hpp"
 
 
 std::shared_ptr<Terminal> terminal;
+int user_access = -1;
 
 
 
@@ -119,14 +121,26 @@ bool Terminal::InitTerminals()
         std::cerr << "Failed to create owner terminal.\n";
         return false;
     }
+    
+    trm_login = std::make_shared<Login>();
+    if (trm_login == nullptr) {
+        std::cerr << "Failed to create login terminal.\n";
+        return false;
+    }
 
-    terminal = trm_homepage;
+    terminal = trm_login;
     return true;
 }
 
 
 void Terminal::SwitchToTerminal(std::string trm_name)
 {
+    if (!has_access(trm_name))
+    {
+        std::cout << "You lack access to the requested page.\n";
+        return;
+    }
+
     if (trm_name == "home") {
         terminal = trm_homepage;
     }
@@ -140,4 +154,30 @@ void Terminal::SwitchToTerminal(std::string trm_name)
         terminal = trm_owner;
     }
     else std::cerr << "Unrecognized page \'"+trm_name+"\'.\nAvailable pages:\n- home\n- register\n- inventory\n- owner\n";
+}
+
+
+bool Terminal::has_access(std::string dst)
+{
+    switch (user_access)
+    {
+        case 1:
+            if (dst == "home") return true;
+            if (dst == "register") return true;
+            break;
+        case 2:
+            if (dst == "home") return true;
+            if (dst == "register") return true;
+            if (dst == "inventory") return true;
+            break;
+        case 3:
+            if (dst == "home") return true;
+            if (dst == "register") return true;
+            if (dst == "inventory") return true;
+            if (dst == "owner") return true;
+            break;
+        default:
+            std::cerr << "Invalid access level\n";
+    }
+    return false;
 }
