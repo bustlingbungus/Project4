@@ -30,6 +30,7 @@ bool HomePage::HandleCommands()
     }
     else if (cmdarr[0] == "help") cmd_help();
     else if (cmdarr[0] == "goto") cmd_goto();
+    else if (cmdarr[0] == "logout") cmd_logout();
     else {
         std::cerr << "Unrecognized command \'"+cmdarr[0]+"\'. Enter \'help\' for a list of commands.\n";
     }
@@ -53,6 +54,7 @@ void HomePage::cmd_help()
         std::cout <<    "\nWelcome to the Home Page. Here are a list of commands:\n\n"<<
                         "help\t\t-\tShow this page\n"<<
                         "exit\t\t-\tExit the application\n"<<
+                        "logout\t\t-\tReturn to login\n"<<
                         "goto <flag>\t-\tGo to another page. Replace <flag> with the name of the desired page.\n"<<
                         "<available pages>\n"<<
                         "- register\n"<<
@@ -69,5 +71,15 @@ void HomePage::cmd_goto()
     else
     {
         Terminal::SwitchToTerminal(cmdarr[1]);
+    }
+}
+
+
+void HomePage::cmd_logout()
+{
+    if (cmdarr.size() != 1) std::cerr << "Invalid argument count for \'logout\' command.\n";
+    else
+    {
+        Terminal::SwitchToTerminal("login");
     }
 }

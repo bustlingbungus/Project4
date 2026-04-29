@@ -153,25 +153,26 @@ void Terminal::SwitchToTerminal(std::string trm_name)
     else if (trm_name == "owner") {
         terminal = trm_owner;
     }
+    else if (trm_name == "login") {
+        terminal = trm_login;
+    }
     else std::cerr << "Unrecognized page \'"+trm_name+"\'.\nAvailable pages:\n- home\n- register\n- inventory\n- owner\n";
 }
 
 
 bool Terminal::has_access(std::string dst)
 {
+    if (dst == "login" || dst == "home") return true;
     switch (user_access)
     {
         case 1:
-            if (dst == "home") return true;
             if (dst == "register") return true;
             break;
         case 2:
-            if (dst == "home") return true;
             if (dst == "register") return true;
             if (dst == "inventory") return true;
             break;
         case 3:
-            if (dst == "home") return true;
             if (dst == "register") return true;
             if (dst == "inventory") return true;
             if (dst == "owner") return true;
