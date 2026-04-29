@@ -69,4 +69,24 @@ BEGIN
     SELECT * FROM employees;
 END$$
 
+
+CREATE PROCEDURE user_exists(
+    IN p_username VARCHAR(255)
+)
+BEGIN
+    DECLARE cnt INT;
+
+    SELECT COUNT(*)
+    INTO cnt
+    FROM employees
+    WHERE username = p_username;
+
+    IF cnt > 0 THEN
+        SELECT TRUE AS exists_flag;
+    ELSE
+        SELECT FALSE AS exists_flag;
+    END IF;
+
+END$$
+
 DELIMITER ;
