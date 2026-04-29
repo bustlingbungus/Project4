@@ -108,26 +108,28 @@ void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingre
     }
     ingredients_json += "]";
 
+
     // to conform with formatting on the command line, the JSON double quotes need to be 
     // formatted as another character 
-    std::string escaped_json = ingredients_json;
+    std::string json = ingredients_json;
     size_t pos = 0;
-    while ((pos = escaped_json.find('"', pos)) != std::string::npos) {
-        escaped_json.insert(pos, "\\"); // insert '\\' character where the double 
-        pos += 2;
+    while ((pos = json.find('"', pos)) != std::string::npos) {
+        json.insert(pos, "\\"); // insert '\\' character where the double quotes were
+        pos += 2; // increment position past hte fixed quote
     }
+    json = "CAST(\'"+json+"\' AS JSON)"; // format to SQL cast
 
-    std::string sql = "CALL add_menu_item(";
-    sql += "'" + title + "', ";
-    sql += std::to_string(price) + ", ";
-    
-    sql += "CAST('" + escaped_json + "' AS JSON));";
 
-    std::string sqlValue = "\"" + sql + "\"";
-    ExecSQL(sqlValue);
+    // format sql call
+    ExecSQL("\"CALL add_menu_item(\'"+title+"\',"+std::to_string(price)+","+json+");\"");
 }
 
 
+/**
+ * Formats internally stored date to string. Adds a sale using date and arguents passed 
+ * here. If the optional `customer_phone` arg is entered, the sale's price is rounded 
+ * up to the nearest integer, and added to the customer's points. Call's  
+ */
 void CafeDatabase::AddSale(std::string item_sold, std::string customer_phone)
 {
     // format date as string
