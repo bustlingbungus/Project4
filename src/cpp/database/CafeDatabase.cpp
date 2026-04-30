@@ -153,8 +153,7 @@ void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingre
 void CafeDatabase::AddSale(std::string item_sold, std::string customer_phone)
 {
     // format date as string
-    std::string date_arg = "\'"+std::to_string(curr_date.year)+"-"+std::to_string(curr_date.month)+"-"+std::to_string(curr_date.day)+"\'";
-
+    std::string date_arg = "\'"+curr_date.to_string(DATEFORMAT_YYYYMMDD)+"\'";
     // add quotes to custoemr phone if not null
     if (customer_phone != "NULL") customer_phone = "\'"+customer_phone+"\'";
 
