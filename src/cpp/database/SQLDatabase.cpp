@@ -1,6 +1,7 @@
 #include "SQLDatabase.hpp"
 
 #include <iostream>
+#include <unistd.h>
 
 #include "../sys/fileaccess.hpp"
 #include "../sys/systemcall.hpp"
