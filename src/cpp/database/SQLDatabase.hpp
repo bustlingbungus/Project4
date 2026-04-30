@@ -13,6 +13,5 @@ class SQLDatabase
 
     protected:
         
-
         std::string database = "None";
 };
