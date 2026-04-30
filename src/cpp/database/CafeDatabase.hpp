@@ -25,14 +25,14 @@ class CafeDatabase : public SQLDatabase
         
         void ResetSQLDatabase();
 
-        void AddIngredient(std::string label, float amount);
-        void AddMenuItem(std::string title, float price, std::vector<Ingredient> ingredients);
+        void AddIngredient(std::string label, std::string amount);
+        void AddMenuItem(std::string title, std::string price, std::vector<Ingredient> ingredients);
         void AddSale(std::string item_sold, std::string customer_phone = "NULL");
         void AddCustomer(std::string name, std::string email, std::string phone);
-        void AddIngredient(std::string item_name, std::string ingredient, float amount);
-        void AddEmployee(std::string username, std::string password, std::string name, int access_type);
+        void AddIngredient(std::string item_name, std::string ingredient, std::string amount);
+        void AddEmployee(std::string username, std::string password, std::string name, std::string access_type);
 
-        void RefundSale(int sale_id);
+        void RefundSale(std::string sale_id);
         void RemoveIngredient(std::string ing_name);
         void RemoveMenuItem(std::string item_name);
         void RemoveCustomer(std::string phone_number);

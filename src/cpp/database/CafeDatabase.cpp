@@ -55,27 +55,27 @@ void CafeDatabase::ResetSQLDatabase()
     // add initial table entries
 
     // ingredients
-    AddIngredient("Sugar", 10.00);
-    AddIngredient("coffee_grounds", 15.00);
-    AddIngredient("tea_leaves", 4.00);
-    AddIngredient("milk", 16.00);
-    AddIngredient("creamer", 8.00);
-    AddIngredient("almond_milk", 8.00);
+    AddIngredient("Sugar", "10.00");
+    AddIngredient("coffee_grounds", "15.00");
+    AddIngredient("tea_leaves", "4.00");
+    AddIngredient("milk", "16.00");
+    AddIngredient("creamer", "8.00");
+    AddIngredient("almond_milk", "8.00");
 
     // menu items
-    AddMenuItem("Coffee", 2.50, {
-        (Ingredient){"coffee_grounds",  0.25    },
-        (Ingredient){"creamer",         0.5     },
-        (Ingredient){"sugar",           0.1     }
+    AddMenuItem("Coffee", "2.50", {
+        (Ingredient){"coffee_grounds",  "0.25"    },
+        (Ingredient){"creamer",         "0.5"     },
+        (Ingredient){"sugar",           "0.1"     }
     });
     
-    AddMenuItem("espresso_shot", 1.00, {
-        (Ingredient){"coffee_grounds",  0.25    },
+    AddMenuItem("espresso_shot", "1.00", {
+        (Ingredient){"coffee_grounds",  "0.25"    },
     });
 
-    AddMenuItem("sweet_tea", 3.00, {
-        (Ingredient){"tea_leaves",      0.1     },
-        (Ingredient){"sugar",           0.3     }
+    AddMenuItem("sweet_tea", "3.00", {
+        (Ingredient){"tea_leaves",      "0.1"     },
+        (Ingredient){"sugar",           "0.3"     }
     });
 
 
@@ -84,9 +84,9 @@ void CafeDatabase::ResetSQLDatabase()
     AddCustomer("ben_steele","bens@usf.edu","8139879876");
 
     // employees
-    AddEmployee("cafesteve", "mycafe43", "steven_tiras", 3);
-    AddEmployee("dominic", "domf88", "dominic_fresno", 2);
-    AddEmployee("stellaz", "cafejob9", "stella_azam", 1);
+    AddEmployee("cafesteve", "mycafe43", "steven_tiras", "3");
+    AddEmployee("dominic", "domf88", "dominic_fresno", "2");
+    AddEmployee("stellaz", "cafejob9", "stella_azam", "1");
 }
 
 
@@ -98,9 +98,9 @@ void CafeDatabase::ResetSQLDatabase()
  * \param label The name of the ingredient to add
  * \param amount The amount of the item in stock
  */
-void CafeDatabase::AddIngredient(std::string label, float amount)
+void CafeDatabase::AddIngredient(std::string label, std::string amount)
 {
-    ExecSQL("\"CALL add_ingredient(\'"+label+"\',"+std::to_string(amount)+");\"");
+    ExecSQL("\"CALL add_ingredient(\'"+label+"\',"+amount+");\"");
 }
 
 
@@ -112,7 +112,7 @@ void CafeDatabase::AddIngredient(std::string label, float amount)
  * \param price Price of the item
  * \param ingredients Vector of ingredients the menu item should use
  */
-void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingredient> ingredients)
+void CafeDatabase::AddMenuItem(std::string title, std::string price, std::vector<Ingredient> ingredients)
 {
     // convert ingredients vector to JSON string
     std::string ingredients_json = "[";
@@ -120,7 +120,7 @@ void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingre
     {
         if (i > 0) ingredients_json += ",";
         // format each ingredient as {"label":"ing_label","amount":ing_amount}
-        ingredients_json += "{\"label\":\""+ingredients[i].label+"\",\"amount\":"+std::to_string(ingredients[i].amount)+"}";
+        ingredients_json += "{\"label\":\""+ingredients[i].label+"\",\"amount\":"+ingredients[i].amount+"}";
     }
     ingredients_json += "]";
 
@@ -137,7 +137,7 @@ void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingre
 
 
     // format sql call
-    ExecSQL("\"CALL add_menu_item(\'"+title+"\',"+std::to_string(price)+","+json+");\"");
+    ExecSQL("\"CALL add_menu_item(\'"+title+"\',"+price+","+json+");\"");
 }
 
 
@@ -186,9 +186,9 @@ void CafeDatabase::AddCustomer(std::string name, std::string email, std::string 
  * \param ingredient Name of the ingredient to add
  * \param amount Amount of the ingredient used by the menu item
  */
-void CafeDatabase::AddIngredient(std::string item_name, std::string ingredient, float amount)
+void CafeDatabase::AddIngredient(std::string item_name, std::string ingredient, std::string amount)
 {
-    ExecSQL("\"CALL add_menuitemingredient(\'"+item_name+"\',\'"+ingredient+"\',"+std::to_string(amount)+");\"");
+    ExecSQL("\"CALL add_menuitemingredient(\'"+item_name+"\',\'"+ingredient+"\',"+amount+");\"");
 }
 
 
@@ -200,9 +200,9 @@ void CafeDatabase::AddIngredient(std::string item_name, std::string ingredient, 
  * \param name Employee's actual name
  * \param access the access level the account should have. 1 for register, 2 for inventory, 3 for owner
  */
-void CafeDatabase::AddEmployee(std::string username, std::string password, std::string name, int access)
+void CafeDatabase::AddEmployee(std::string username, std::string password, std::string name, std::string access)
 {
-    ExecSQL("\"CALL add_employee(\'"+username+"\',\'"+password+"\',\'"+name+"\',"+std::to_string(access)+");\"");
+    ExecSQL("\"CALL add_employee(\'"+username+"\',\'"+password+"\',\'"+name+"\',"+access+");\"");
 }
 
 
@@ -213,9 +213,9 @@ void CafeDatabase::AddEmployee(std::string username, std::string password, std::
  * 
  * \param sale_id id number of the sale to remove
  */
-void CafeDatabase::RefundSale(int sale_id)
+void CafeDatabase::RefundSale(std::string sale_id)
 {
-    ExecSQL("\"CALL remove_sale("+std::to_string(sale_id)+");\"");
+    ExecSQL("\"CALL remove_sale("+sale_id+");\"");
 }
 
 

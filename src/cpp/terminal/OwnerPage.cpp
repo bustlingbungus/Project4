@@ -199,7 +199,7 @@ void OwnerPage::cmd_setinventory_amount()
 {
     if (cmdarr.size() != 3) std::cerr << "Invalid argument count for \'setamount\' command\n";
     else {
-        cafeDatabase.AddIngredient(cmdarr[1], std::stof(cmdarr[2]));
+        cafeDatabase.AddIngredient(cmdarr[1], cmdarr[2]);
     }
 }
 
@@ -221,11 +221,11 @@ void OwnerPage::cmd_addmenuitem()
         std::vector<Ingredient> ingredients;
         for (int i = 4; i < cmdarr.size(); i += 2)
         {
-            Ingredient ing = {cmdarr[i - 1], std::stof(cmdarr[i])};
+            Ingredient ing = {cmdarr[i - 1], cmdarr[i]};
             ingredients.push_back(ing);
         }
 
-        cafeDatabase.AddMenuItem(cmdarr[1], std::stof(cmdarr[2]), ingredients);
+        cafeDatabase.AddMenuItem(cmdarr[1], cmdarr[2], ingredients);
     }
 }
 
@@ -252,7 +252,7 @@ void OwnerPage::cmd_refundsale()
 {
     if (cmdarr.size() != 2) std::cerr << "Incorrect argument count for \'refund\' command.\n";
     else {
-        cafeDatabase.RefundSale(std::stoi(cmdarr[1]));
+        cafeDatabase.RefundSale(cmdarr[1]);
     }
 }
 
@@ -261,7 +261,7 @@ void OwnerPage::cmd_addingredient()
 {
     if (cmdarr.size() != 4) std::cerr << "Incorrect argument count for \'addingredient\' command.\n";
     else {
-        cafeDatabase.AddIngredient(cmdarr[1], cmdarr[2], std::stof(cmdarr[3]));
+        cafeDatabase.AddIngredient(cmdarr[1], cmdarr[2], cmdarr[3]);
     }
 }
 
@@ -270,7 +270,9 @@ void OwnerPage::cmd_addemployee()
 {
     if (cmdarr.size() != 5) std::cerr << "Incorrect argument count for \'addemployee\' command.\n";
     else {
-        cafeDatabase.AddEmployee(cmdarr[1], cmdarr[2], cmdarr[3], std::stoi(cmdarr[4]));
+        if (cmdarr[1] == "exit") std::cout << "Bad username \'exit\'\n";
+        else if (cmdarr[2] == "exit") std::cout << "Bad password \'exit\'\n";
+        else cafeDatabase.AddEmployee(cmdarr[1], cmdarr[2], cmdarr[3], cmdarr[4]);
     }
 }
 

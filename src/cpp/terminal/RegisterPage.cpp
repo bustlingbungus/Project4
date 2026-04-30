@@ -127,7 +127,7 @@ void RegisterPage::cmd_refundsale()
 {
     if (cmdarr.size() != 2) std::cerr << "Invalid argument count for \'refundsale\' command.\n";
     else {
-        cafeDatabase.RefundSale(std::stoi(cmdarr[1]));
+        cafeDatabase.RefundSale(cmdarr[1]);
     }
 }
 
