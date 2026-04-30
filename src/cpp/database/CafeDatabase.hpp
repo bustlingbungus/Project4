@@ -7,10 +7,13 @@
 
 #include "Ingredient.hpp"
 #include "Date.hpp"
-#include "Customer.hpp"
 
 
 
+/**
+ * Main interface for interacting with the SQL cafe database.
+ * Contains the current date on user's computer.
+ */
 class CafeDatabase : public SQLDatabase
 {
     public:
@@ -18,9 +21,9 @@ class CafeDatabase : public SQLDatabase
         CafeDatabase();
         ~CafeDatabase();
 
-        void ResetSQLDatabase();
-
         Date CurrDate();
+        
+        void ResetSQLDatabase();
 
         void AddIngredient(std::string label, float amount);
         void AddMenuItem(std::string title, float price, std::vector<Ingredient> ingredients);
@@ -45,11 +48,11 @@ class CafeDatabase : public SQLDatabase
 
     protected:
 
-        void CallFunctionWithoutArgs(std::string function);
-
         Date GetDate(std::time_t date);
 
+        /** The current date on the user's computer */
         Date curr_date;
 };
 
+/** Main interface for interacting with the SQL cafe database */
 extern CafeDatabase cafeDatabase;

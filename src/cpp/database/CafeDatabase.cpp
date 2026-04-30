@@ -8,7 +8,6 @@
 #include "../sys/systemcall.hpp"
 
 
-
 CafeDatabase cafeDatabase;
 
 
@@ -19,6 +18,7 @@ CafeDatabase cafeDatabase;
 CafeDatabase::CafeDatabase()
 : SQLDatabase("cafe_db")
 {
+    // get the date and time and convert it to date struct
     auto t = std::chrono::system_clock::now();
     curr_date = GetDate(std::chrono::system_clock::to_time_t(t));
 }
@@ -30,6 +30,7 @@ CafeDatabase::~CafeDatabase()
 }
 
 
+// The current date on user's computer
 Date CafeDatabase::CurrDate()
 {
     return curr_date;
@@ -90,7 +91,12 @@ void CafeDatabase::ResetSQLDatabase()
 
 
 /**
- * Adds an ingredient to the inventory table. Calls `add_ingredient` sql function.
+ * Adds an ingredient to the inventory table. If the ingredient label already
+ * exists in the database, the ingredient's amount will be updated.
+ * Calls `add_ingredient` sql function.
+ * 
+ * \param label The name of the ingredient to add
+ * \param amount The amount of the item in stock
  */
 void CafeDatabase::AddIngredient(std::string label, float amount)
 {
@@ -101,6 +107,10 @@ void CafeDatabase::AddIngredient(std::string label, float amount)
 /**
  * Adds an item to the menu with a varying amount of ingredients. Formats the ingredients vector as 
  * a JSON string, and calls the `add_menu_item` sql function.
+ * 
+ * \param title Name of the menu item to add
+ * \param price Price of the item
+ * \param ingredients Vector of ingredients the menu item should use
  */
 void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingredient> ingredients)
 {
@@ -134,61 +144,32 @@ void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingre
 /**
  * Formats internally stored date to string. Adds a sale using date and arguents passed 
  * here. If the optional `customer_phone` arg is entered, the sale's price is rounded 
- * up to the nearest integer, and added to the customer's points. Call's  
+ * up to the nearest integer, and added to the customer's points. Call's `add_sale`
+ * SQL procedure.
+ * 
+ * \param item_sold Name of the menu item that was sold
+ * \param customer_phone [Optional] Phone number of the customer buying.
  */
 void CafeDatabase::AddSale(std::string item_sold, std::string customer_phone)
 {
     // format date as string
     std::string date_arg = "\'"+std::to_string(curr_date.year)+"-"+std::to_string(curr_date.month)+"-"+std::to_string(curr_date.day)+"\'";
 
+    // add quotes to custoemr phone if not null
     if (customer_phone != "NULL") customer_phone = "\'"+customer_phone+"\'";
 
-    std::string func_str = "\"CALL add_sale(\'"+item_sold+"\',"+date_arg+","+customer_phone+");\"";
-
-    ExecSQL(func_str);
+    ExecSQL("\"CALL add_sale(\'"+item_sold+"\',"+date_arg+","+customer_phone+");\"");
 }
 
 
-void CafeDatabase::AddIngredient(std::string item_name, std::string ingredient, float amount)
-{
-    ExecSQL("\"CALL add_menuitemingredient(\'"+item_name+"\',\'"+ingredient+"\',"+std::to_string(amount)+");\"");
-}
-
-
-void CafeDatabase::AddEmployee(std::string username, std::string password, std::string name, int access)
-{
-    ExecSQL("\"CALL add_employee(\'"+username+"\',\'"+password+"\',\'"+name+"\',"+std::to_string(access)+");\"");
-}
-
-
-void CafeDatabase::RefundSale(int sale_id)
-{
-    ExecSQL("\"CALL remove_sale("+std::to_string(sale_id)+");\"");
-}
-
-
-void CafeDatabase::RemoveIngredient(std::string ing_name)
-{
-    ExecSQL("\"CALL remove_ingredient(\'"+ing_name+"\');\"");
-}
-
-void CafeDatabase::RemoveMenuItem(std::string item_name)
-{
-    ExecSQL("\"CALL remove_menu_item(\'"+item_name+"\');\"");
-}
-
-void CafeDatabase::RemoveCustomer(std::string phone_number)
-{
-    ExecSQL("\"CALL remove_customer(\'"+phone_number+"\');\"");
-}
-
-
-void CafeDatabase::RemoveEmployee(std::string username)
-{
-    ExecSQL("\"CALL remove_employee(\'"+username+"\');\"");
-}
-
-
+/**
+ * Adds a customer to the database. They will initially have 0 points. Calls
+ * `add_customer` SQL Proceudre.
+ * 
+ * \param name Customer's name
+ * \param email Customer's email
+ * \param phone Customer's phone number (just the numbers, no spaces or anything!)
+ */
 void CafeDatabase::AddCustomer(std::string name, std::string email, std::string phone)
 {
     // normalize phone number
@@ -199,56 +180,167 @@ void CafeDatabase::AddCustomer(std::string name, std::string email, std::string 
 }
 
 
+/**
+ * Adds an ingredient to an existing menu item. Calls `add_menuitemingredient` SQL procedure.
+ * 
+ * \param item_name Name of the menu item the ingredient is being added to
+ * \param ingredient Name of the ingredient to add
+ * \param amount Amount of the ingredient used by the menu item
+ */
+void CafeDatabase::AddIngredient(std::string item_name, std::string ingredient, float amount)
+{
+    ExecSQL("\"CALL add_menuitemingredient(\'"+item_name+"\',\'"+ingredient+"\',"+std::to_string(amount)+");\"");
+}
+
+
+/**
+ * Adds an employee to the employees table. Calls `add_employee` SQL procedure.
+ * 
+ * \param username Employee's username used for login
+ * \param password Employee's password used for login
+ * \param name Employee's actual name
+ * \param access the access level the account should have. 1 for register, 2 for inventory, 3 for owner
+ */
+void CafeDatabase::AddEmployee(std::string username, std::string password, std::string name, int access)
+{
+    ExecSQL("\"CALL add_employee(\'"+username+"\',\'"+password+"\',\'"+name+"\',"+std::to_string(access)+");\"");
+}
+
+
+/**
+ * Removes a sale form the sales record. Decrements 'items sold' for the menu item on the
+ * sale, and, if there was a customer on the sale, removes the appropriate number of
+ * points from that customer. Calls the `refund_sale` SQL procedure.
+ * 
+ * \param sale_id id number of the sale to remove
+ */
+void CafeDatabase::RefundSale(int sale_id)
+{
+    ExecSQL("\"CALL remove_sale("+std::to_string(sale_id)+");\"");
+}
+
+
+/**
+ * Removes an ingredient from the inventory. Removes the ingredient from all menu items,
+ * without removing those menu items. Calls `remove_ingredient` SQL procedure
+ * 
+ * \param ing_name name of the ingredient to remove
+ */
+void CafeDatabase::RemoveIngredient(std::string ing_name)
+{
+    ExecSQL("\"CALL remove_ingredient(\'"+ing_name+"\');\"");
+}
+
+
+/**
+ * Removes an item from the menu. Removes any sales made with this menu item 
+ * (without deducing customer points). Calls `remove_menu_item` SQL procedure.
+ * 
+ * \param item_name Name of the menu item to remove
+ */
+void CafeDatabase::RemoveMenuItem(std::string item_name)
+{
+    ExecSQL("\"CALL remove_menu_item(\'"+item_name+"\');\"");
+}
+
+
+/**
+ * Removes a customer from the database. Calls `remove_customer` SQL procedure.
+ * 
+ * \param phone_number Phone number of the customer to remove 
+ */
+void CafeDatabase::RemoveCustomer(std::string phone_number)
+{
+    // normalize phone number
+    std::string p = "";
+    for (char& ch : phone_number) if (isdigit(ch)) p += ch;
+
+    ExecSQL("\"CALL remove_customer(\'"+p+"\');\"");
+}
+
+
+/**
+ * Removes an employee from the database. Calls `remove_employee` SQL procedure.
+ * 
+ * \param username Username of the employee to remove
+ */
+void CafeDatabase::RemoveEmployee(std::string username)
+{
+    ExecSQL("\"CALL remove_employee(\'"+username+"\');\"");
+}
+
+
+/**
+ * Shows ingredients in the cafe inventory. Calls `query_ingredients` SQL procedure.
+ */
 void CafeDatabase::QueryIngredients()
 {
-    CallFunctionWithoutArgs("query_ingredients");
+    ExecSQL("\"CALL query_ingredients();\"");
 }
 
 
+/**
+ * Shows menu items. Calls `query_menu` SQL procedure.
+ */
 void CafeDatabase::QueryMenu()
 {
-    CallFunctionWithoutArgs("query_menu");
+    ExecSQL("\"CALL query_menu();\"");
 }
 
 
+/**
+ * Shows all customers. Calls `query_customers` SQL procedure.
+ */
 void CafeDatabase::QueryCustomers()
 {
-    CallFunctionWithoutArgs("query_customers");
+    ExecSQL("\"CALL query_customers();\"");
 }
 
 
+/**
+ * Shows all sales. Calls `query_sales` SQL procedure.
+ */
 void CafeDatabase::QuerySales()
 {
-    CallFunctionWithoutArgs("query_sales");
+    ExecSQL("\"CALL query_sales();\"");
 }
 
 
+/**
+ * Shows ingredients used in all menu items. Calls `query_menuitemingredients` SQL procedure.
+ */
 void CafeDatabase::QueryMenuItemIngredients()
 {
-    CallFunctionWithoutArgs("query_menuingredients");
+    ExecSQL("\"CALL query_menuingredients();\"");
 }
 
 
+/**
+ * Shows the sum of all sale prices. Calls `query_sale_total` SQL procedure.
+ */
 void CafeDatabase::QuerySaleTotal()
 {
-    CallFunctionWithoutArgs("query_sale_total");
+    ExecSQL("\"CALL query_sale_total();\"");
 }
 
 
+/**
+ * Shows all employees. Calls `view_employees` SQL procedure
+ */
 void CafeDatabase::QueryEmployees()
 {
-    CallFunctionWithoutArgs("view_employees");
+    ExecSQL("\"CALL view_employees();\"");
 }
 
 
-void CafeDatabase::CallFunctionWithoutArgs(std::string function)
-{
-    ExecSQL("\"CALL "+function+"();\"");
-}
-
-
+/**
+ * Converts `time_t` produced from `to_time_t` function into a `Date` struct.
+ * 
+ * \param date `time_t` object representing a date and time. 
+ */
 Date CafeDatabase::GetDate(std::time_t date)
 {
+    // get time in a format used for input
     std::istringstream iss(std::ctime(&date));
     
     std::string str;
@@ -280,5 +372,6 @@ Date CafeDatabase::GetDate(std::time_t date)
     iss >> str >> str;
     year = std::stoi(str);
 
+    // format as struct
     return (Date){month, day, year};
 }
