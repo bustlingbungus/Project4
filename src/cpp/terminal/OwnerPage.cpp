@@ -23,7 +23,7 @@ OwnerPage::~OwnerPage()
 
 void OwnerPage::PreInputLog()
 {
-    std::cout << "Owner> ";
+    std::cout <<"[ "<<cafeDatabase.CurrDate().to_string()<<" ] Owner> ";
 }
 
 

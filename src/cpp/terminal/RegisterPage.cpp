@@ -46,7 +46,8 @@ bool RegisterPage::HandleCommands()
 
 void RegisterPage::PreInputLog()
 {
-    std::cout << "Register> ";
+
+    std::cout <<"[ "<<cafeDatabase.CurrDate().to_string()<<" ] Register> ";
 }
 
 

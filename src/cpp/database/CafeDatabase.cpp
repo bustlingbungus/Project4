@@ -30,6 +30,12 @@ CafeDatabase::~CafeDatabase()
 }
 
 
+Date CafeDatabase::CurrDate()
+{
+    return curr_date;
+}
+
+
 /**
  * Drops the entire database. Recreates the database tables and procedures. Uses sql files placed in the cwd
  * to do this.

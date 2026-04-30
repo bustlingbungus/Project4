@@ -24,7 +24,7 @@ InventoryPage::~InventoryPage()
 
 void InventoryPage::PreInputLog()
 {
-    std::cout << "Inventory> ";
+    std::cout <<"[ "<<cafeDatabase.CurrDate().to_string()<<" ] Inventory> ";
 }
 
 

@@ -42,7 +42,7 @@ bool HomePage::HandleCommands()
 
 void HomePage::PreInputLog()
 {
-    std::cout << "Home Page> ";
+    std::cout <<"[ "<<cafeDatabase.CurrDate().to_string()<<" ] Home Page> ";
 }
 
 

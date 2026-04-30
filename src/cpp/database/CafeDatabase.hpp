@@ -20,6 +20,8 @@ class CafeDatabase : public SQLDatabase
 
         void ResetSQLDatabase();
 
+        Date CurrDate();
+
         void AddIngredient(std::string label, float amount);
         void AddMenuItem(std::string title, float price, std::vector<Ingredient> ingredients);
         void AddSale(std::string item_sold, std::string customer_phone = "NULL");
