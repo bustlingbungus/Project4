@@ -84,8 +84,9 @@ bool Login::IsValidUsername()
     else
     {
         std::string str;
-        file >> str >> str;
-        if (std::stoi(str) == 1) return true;
+        if ((file >> str >> str)) {
+            if (std::stoi(str) == 1) return true;
+        } else std::cerr << "Failed to read username result.\n";
     }
 
     return false;
@@ -100,8 +101,9 @@ bool Login::IsValidPassword()
     else
     {
         std::string str;
-        file >> str >> str;
-        if (std::stoi(str) == 1) return true;
+        if ((file >> str >> str)) {
+            if (std::stoi(str) == 1) return true;
+        } else std::cerr << "Failed to read password result.\n";
     }
 
     return false;
@@ -116,8 +118,9 @@ int Login::GetAccessLevel()
     else
     {
         std::string str;
-        file >> str >> str;
-        return std::stoi(str);
+        if ((file >> str >> str)) {
+            return std::stoi(str);
+        } else std::cerr << "Failed to read access level.\n";
     }
 
     return -1;

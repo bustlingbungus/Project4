@@ -29,6 +29,11 @@ SQLDatabase::~SQLDatabase()
 
 void SQLDatabase::ExecSQL(std::string sql, bool pipe_output, std::string pipe_filename)
 {
+    // Strip surrounding double-quotes that were originally meant for shell interpretation.
+    // Since we use execvp (no shell), they are passed literally and break MySQL.
+    if (sql.size() >= 2 && sql.front() == '"' && sql.back() == '"')
+        sql = sql.substr(1, sql.size() - 2);
+
     std::string cmd = "mysql";
     std::vector<std::string> cmdarr = {
         cmd,
@@ -68,4 +73,17 @@ void SQLDatabase::ExecSQL(std::string sql, bool pipe_output, std::string pipe_fi
         if (dup2(saved_file_output_desc, output_file_desc) < 0) std::cerr << "failed to pipe output!\n";
         close(saved_file_output_desc);
     }
+}
+
+
+void SQLDatabase::ExecSQLFile(std::string filename, bool use_database)
+{
+    std::string cmd = "mysql";
+    std::vector<std::string> cmdarr = {
+        cmd,
+        "--defaults-extra-file=my.cnf",
+    };
+    if (use_database) cmdarr.push_back(database);
+
+    RunCommandsWithFileInput(cmd, cmdarr, filename);
 }

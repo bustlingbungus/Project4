@@ -27,11 +27,12 @@ CafeDatabase::~CafeDatabase()
 void CafeDatabase::ResetSQLDatabase()
 {
     // drops database and creates tables
-    ExecSQL("\"SOURCE cafe_db.sql;\"");
+    // use_database=false because cafe_db.sql creates the database from scratch
+    ExecSQLFile("cafe_db.sql", false);
     // create procedures
-    ExecSQL("\"SOURCE add_procedures.sql;\"");
-    ExecSQL("\"SOURCE remove_procedures.sql;\"");
-    ExecSQL("\"SOURCE query_procedures.sql;\"");
+    ExecSQLFile("add_procedures.sql");
+    ExecSQLFile("remove_procedures.sql");
+    ExecSQLFile("query_procedures.sql");
 
     // add initial table entries
 
@@ -92,17 +93,9 @@ void CafeDatabase::AddMenuItem(std::string title, float price, std::vector<Ingre
     std::string sql = "CALL add_menu_item(";
     sql += "'" + title + "', ";
     sql += std::to_string(price) + ", ";
-    // escape double quotes for shell double-quoted argument
-    std::string escaped_json = ingredients_json;
-    size_t pos = 0;
-    while ((pos = escaped_json.find('"', pos)) != std::string::npos) {
-        escaped_json.insert(pos, "\\");
-        pos += 2;
-    }
-    sql += "CAST('" + escaped_json + "' AS JSON));";
+    sql += "CAST('" + ingredients_json + "' AS JSON));";
 
-    std::string sqlValue = "\"" + sql + "\"";
-    ExecSQL(sqlValue);
+    ExecSQL(sql);
 }
 
 
