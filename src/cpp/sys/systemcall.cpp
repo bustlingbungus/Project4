@@ -1,8 +1,13 @@
-/** @todo Test systemcall functionality for macOS + Linux */
-
 #include "systemcall.hpp"
 
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <unistd.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
 #ifdef _WIN32 // windows
 #include <windows.h>
@@ -35,7 +40,7 @@ int RunCommands(std::string cmd, std::vector<std::string> cmdarr)
 
     // convert the argument array into a single command line string
     std::string cmdline = "";
-    for (std::string cmd : cmdarr) cmdline += cmd + ' ';
+    for (std::string& cmd : cmdarr) cmdline += cmd + ' ';
 
     // set up structure for new process
     PROCESS_INFORMATION processInfo;
@@ -118,24 +123,33 @@ int RunCommands(std::string cmd, std::vector<std::string> cmdarr)
 
 
 /**
- * Set the current working directory to an absolute or relative directory. 
+ * Changes cout output location to any provided filename, so that console logs print to that 
+ * file rather than the console.
  * 
- * You may pass '..' as an argument to move to the root directory.
+ * \param filename Name of the new output location
+ * \param output_file_desc File descriptor of the current output location. `STDOUT_FILENO` for the console
+ * \param saved_output_file_desc Current output description will be saved here, so you can maintain the reference after the swap occurs
  * 
- * \param dir The directory to move into. May be either absolute or relative
- * 
- * \returns `0` for sucessful execution. Returns a non-zero otherwise.
+ * \returns The file descriptor for the new output location. -1 If there was an error
  */
-int setcwd(std::string dir)
+int PipeOutput(std::string filename, int* output_file_desc, int* saved_output_file_desc)
 {
-#ifdef _WIN32 // windows 
-    return _chdir(dir.c_str());
-#elif defined(__unix__) || defined(__linux__) || defined(__APPLE__) // unix OS
-    return chdir(dir.c_str());
-#else
-    std::cerr << "Unsupported operating system\n";
-    return -1;
-#endif // _WIN32
+    // open new output file
+    int new_file_desc = open(filename.c_str(), O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR);
+    if (new_file_desc < 0) return -1;
+    else
+    {
+        // save current output file
+        *saved_output_file_desc = dup(*output_file_desc);
+        if (*saved_output_file_desc < 0) return -1;
+        else 
+        {
+            // change output to new file
+            if (dup2(new_file_desc, *output_file_desc) < 0) return -1;
+            close(new_file_desc);
+        }
+    }
+    return new_file_desc;
 }
 
 
@@ -188,35 +202,16 @@ int RunCommandsWithFileInput(std::string cmd, std::vector<std::string> cmdarr, s
 
 
 /**
- * Returns the current working directory.
+ * Restores an altered output location to the descriptor saved in `saved_output_file_desc`.
+ *
+ * \param saved_output_file_desc File descriptor of an old output location
+ * \param output_file_desc Location for descriptor to be stored
+ *
+ * \returns 0 for success, -1 for failure
  */
-std::string getcwd()
+int RestoreOutput(int* saved_output_file_desc, int* output_file_desc)
 {
-
-#ifdef _WIN32 // windows
-    
-    // use char buffer to get cwd
-    char* buffer = NULL;
-    if ((buffer = _getcwd(NULL, 0)) == NULL) {
-        std::cerr << "Failed to find cwd.\n";
-        return "";
-    }
-    // convert cwd buffer to string
-    return (std::string)buffer;
-
-#elif defined(__unix__) || defined(__linux__) || defined(__APPLE__) // unix OS
-
-    // use char buffer to get cwd
-    char buffer[1024];
-    if (getcwd(buffer, sizeof(buffer)) == NULL) {
-        std::cerr << "Failed to find cwd.\n";
-        return "";
-    }
-    // convert cwd buffer to string
-    return (std::string)buffer;
-
-#else
-    std::cerr << "Unsupported operating system\n";
-    return "";
-#endif // _WIN32
+    if (dup2(*saved_output_file_desc, *output_file_desc) < 0) return -1;
+    close(*saved_output_file_desc);
+    return 0;
 }

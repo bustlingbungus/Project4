@@ -24,7 +24,7 @@ InventoryPage::~InventoryPage()
 
 void InventoryPage::PreInputLog()
 {
-    std::cout << "Inventory> ";
+    std::cout <<"[ "<<cafeDatabase.CurrDate().to_string()<<" ] Inventory> ";
 }
 
 
@@ -126,6 +126,6 @@ void InventoryPage::cmd_setinventory_amount()
 {
     if (cmdarr.size() != 3) std::cerr << "Invalid argument count for \'setamount\' command\n";
     else {
-        cafeDatabase.AddIngredient(cmdarr[1], std::stof(cmdarr[2]));
+        cafeDatabase.AddIngredient(cmdarr[1], cmdarr[2]);
     }
 }

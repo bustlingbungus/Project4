@@ -5,5 +5,5 @@
 struct Ingredient
 {
     std::string label;
-    float amount;
+    std::string amount;
 };
