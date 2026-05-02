@@ -36,7 +36,6 @@ CREATE TABLE IF NOT EXISTS Customers (
 CREATE TABLE IF NOT EXISTS Sales (
   sale_id INT AUTO_INCREMENT PRIMARY KEY,
   item_id INT NOT NULL,
-  -- FOREIGN KEY (item_id) REFERENCES MenuItems(item_id),
   date DATE NOT NULL,
   customer_id INT,
   FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
